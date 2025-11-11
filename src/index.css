@@ -1,0 +1,22 @@
+@import "tailwindcss";
+
+@theme {
+  --color-type-bug: #a7b723;
+  --color-type-dark: #75574c;
+  --color-type-dragon: #7037ff;
+  --color-type-electric: #f9cf30;
+  --color-type-fairy: #e69ea6;
+  --color-type-fighting: #c12239;
+  --color-type-fire: #f57d31;
+  --color-type-flying: #a891ec;
+  --color-type-ghost: #70559b;
+  --color-type-normal: #aaa67f;
+  --color-type-grass: #74cb48;
+  --color-type-ground: #dec16b;
+  --color-type-ice: #9ad6df;
+  --color-type-poison: #a43e9e;
+  --color-type-psychic: #fb5584;
+  --color-type-rock: #b69e31;
+  --color-type-steel: #b7b9d0;
+  --color-type-water: #6493eb;
+}
