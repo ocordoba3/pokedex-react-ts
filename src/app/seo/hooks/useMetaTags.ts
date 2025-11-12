@@ -68,10 +68,10 @@ const upsertStructuredData = (
 const useMetaTags = ({
   title,
   description,
-  image = DEFAULT_OG_IMAGE,
+  image,
   canonical,
   type = "website",
-  siteName = SITE_NAME,
+  siteName,
   structuredData,
 }: MetaInput) => {
   useEffect(() => {
@@ -79,6 +79,8 @@ const useMetaTags = ({
 
     const resolvedCanonical =
       canonical || window.location.href || window.location.origin;
+    const resolvedImage = image ?? DEFAULT_OG_IMAGE ?? "";
+    const resolvedSiteName = siteName ?? SITE_NAME;
 
     document.title = title;
     ensureMetaTag('meta[name="description"]', {
@@ -98,7 +100,7 @@ const useMetaTags = ({
 
     ensureMetaTag('meta[property="og:image"]', {
       property: "og:image",
-    }).setAttribute("content", image);
+    }).setAttribute("content", resolvedImage);
 
     ensureMetaTag('meta[property="og:url"]', {
       property: "og:url",
@@ -110,7 +112,7 @@ const useMetaTags = ({
 
     ensureMetaTag('meta[property="og:site_name"]', {
       property: "og:site_name",
-    }).setAttribute("content", siteName);
+    }).setAttribute("content", resolvedSiteName);
 
     ensureMetaTag('meta[name="twitter:card"]', {
       name: "twitter:card",
@@ -126,10 +128,18 @@ const useMetaTags = ({
 
     ensureMetaTag('meta[name="twitter:image"]', {
       name: "twitter:image",
-    }).setAttribute("content", image);
+    }).setAttribute("content", resolvedImage);
 
     upsertStructuredData(structuredData);
-  }, [canonical, description, image, siteName, structuredData, title, type]);
+  }, [
+    canonical,
+    description,
+    image,
+    siteName,
+    structuredData,
+    title,
+    type,
+  ]);
 };
 
 export default useMetaTags;

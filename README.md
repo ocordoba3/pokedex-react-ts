@@ -1,73 +1,71 @@
-# React + TypeScript + Vite
+# Pokédex
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Full-stack web app (React + Vite + Express) that recreates a modern Pokédex. After signing in you can search, filter, and sort Pokémon, review detailed pages (types, base stats, height/weight, official artwork), and hop between entries without losing the session. The backend layer caches PokeAPI listings to speed up navigation and normalizes the responses consumed by the frontend.
 
-Currently, two official plugins are available:
+## Key features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Mock authentication: log in with (`admin` / `admin`) to reach the protected list.
+- Grid with search, pagination, and sorting by number or name, persisted in the URL.
+- Detail page themed by primary type, previous/next navigation, and rich SEO metadata.
+- Express backend acting as a proxy/cache for PokeAPI, exposing login, list, and detail endpoints.
 
-## React Compiler
+## Stack
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- React 19 + Vite + TypeScript.
+- React Router 7 and React Query 5 for routing and cached fetching.
+- Tailwind CSS v4 (via `@tailwindcss/vite`) for utility styling.
+- Express + Axios + TSX (TypeScript runtime) to integrate with PokeAPI.
 
-## Expanding the ESLint configuration
+## Prerequisites
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- Node.js 20+ and npm 10+.
+- Network access to reach the [PokeAPI](https://pokeapi.co/).
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+## Getting started
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
+1. Install dependencies:
+   ```bash
+   npm install
+   ```
+2. Configure environment variables by renaming the `.env.example` file to `.env` in the project root (the same file is read by both Vite and the backend):
 
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+   ```bash
+   # Backend
+   VITE_PORT=3000
+   VITE_ALLOWED_ORIGIN=http://localhost:5173
+   VITE_POKE_API_BASE=https://pokeapi.co/api/v2
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+   # Frontend
+   VITE_API_URL=http://localhost:3000
+   VITE_SITE_URL=https://pokedex.local
+   VITE_DEFAULT_OG_IMAGE=https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png
+   ```
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+   - `VITE_ALLOWED_ORIGIN` must match the origin where Vite runs.
+   - `VITE_API_URL` must point to the Express backend.
+   - `VITE_SITE_URL` and `VITE_DEFAULT_OG_IMAGE` feed SEO/Open Graph data; customize them per environment.
 
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
+## Run locally
+
+1. **Start the backend first** (required so the frontend can authenticate and query the Pokédex):
+   ```bash
+   npm run backend
+   ```
+   This launches the Express server at `http://localhost:${VITE_PORT}` and keeps the terminal busy.
+2. In a separate terminal, **start the Vite frontend**:
+   ```bash
+   npm run dev
+   ```
+   By default it serves on `http://localhost:5173`.
+3. Open the Vite URL in your browser, sign in with `admin` / `admin`, and explore the Pokédex.
+
+## Useful scripts
+
+- `npm run build`: compiles TypeScript and produces production assets.
+- `npm run preview`: serves the pre-built bundle.
+- `npm run lint`: runs ESLint across the project.
+
+## Notes
+
+- The backend keeps an in-memory cache for the master list; restart the process if you need to flush it.
+- If you change the default ports, update both `VITE_ALLOWED_ORIGIN` and `VITE_API_URL` to avoid CORS or auth issues.
