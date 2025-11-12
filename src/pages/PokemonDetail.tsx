@@ -4,6 +4,28 @@ import { useQuery } from "@tanstack/react-query";
 import { getPokemonById } from "../helpers/pokemon";
 import useMetaTags from "../hooks/useMetaTags";
 import { PATHS } from "../utils/paths";
+import Pokedex from "../assets/icons/Pokedex";
+
+const TYPE_BG_CLASS_MAP = {
+  bug: "bg-type-bug",
+  dark: "bg-type-dark",
+  dragon: "bg-type-dragon",
+  electric: "bg-type-electric",
+  fairy: "bg-type-fairy",
+  fighting: "bg-type-fighting",
+  fire: "bg-type-fire",
+  flying: "bg-type-flying",
+  ghost: "bg-type-ghost",
+  normal: "bg-type-normal",
+  grass: "bg-type-grass",
+  ground: "bg-type-ground",
+  ice: "bg-type-ice",
+  poison: "bg-type-poison",
+  psychic: "bg-type-psychic",
+  rock: "bg-type-rock",
+  steel: "bg-type-steel",
+  water: "bg-type-water",
+} as const;
 
 function PokemonDetail() {
   const { id } = useParams<{ id: string }>();
@@ -23,6 +45,10 @@ function PokemonDetail() {
   const abilities = data?.abilities ?? [];
   const moves = data?.moves ?? [];
   const forms = data?.forms ?? [];
+  const primaryType = data?.types?.[0]?.type?.name?.toLowerCase() ?? "normal";
+  const bgColor =
+    TYPE_BG_CLASS_MAP[primaryType as keyof typeof TYPE_BG_CLASS_MAP] ??
+    TYPE_BG_CLASS_MAP.normal;
 
   useMetaTags({
     title: `Pokédex | ${
@@ -54,7 +80,13 @@ function PokemonDetail() {
           {(error as Error).message || "Unable to load Pokémon details."}
         </div>
       ) : data ? (
-        <div className="overflow-hidden rounded-4xl bg-linear-to-b from-rose-500 to-rose-600 shadow-[0_25px_45px_rgba(225,29,72,0.35)]">
+        <div className={`relative overflow-hidden rounded-4xl ${bgColor}`}>
+          <Pokedex
+            color="#FFFFFF20"
+            width="600px"
+            height="600px"
+            style={{ position: "absolute", right: 0, top: 0 }}
+          />
           <div className="relative px-6 pb-32 pt-6 text-white">
             <div className="flex items-center justify-between">
               <h1 className="text-3xl font-bold capitalize">{data.name}</h1>
@@ -71,7 +103,7 @@ function PokemonDetail() {
               <img
                 src={data.image}
                 alt={data.name}
-                className="h-48 w-48 object-contain drop-shadow-[0_35px_55px_rgba(0,0,0,0.35)]"
+                className="w-1/2 object-contain drop-shadow-[0_35px_55px_rgba(0,0,0,0.35)]"
               />
             </div>
           </div>

@@ -18,7 +18,7 @@ export type PokemonDetail = PokemonListItem & {
   description?: string;
   height?: number;
   weight?: number;
-  types?: string[];
+  types?: TypesObj[];
   abilities?: string[];
   moves?: string[];
   forms?: string[];
@@ -29,4 +29,12 @@ export type PokemonListParams = {
   limit?: number;
   search?: string;
   sort?: SortOption;
+};
+
+type TypesObj = {
+  slot: number;
+  type: {
+    name: string;
+    url: string;
+  };
 };

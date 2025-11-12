@@ -9,7 +9,7 @@ function App() {
 
   return (
     <div className="min-h-screen bg-white text-slate-900">
-      <nav className="flex flex-nowrap justify-between items-center bg-type-fighting text-white px-4 py-2 md:px-8 md:py-4 sticky top-0 z-10">
+      <nav className="flex flex-nowrap justify-between items-center bg-type-fighting text-white px-4 py-2 md:px-8 md:py-4 sticky top-0 z-20">
         <Link
           to={PATHS.HOME}
           className="text-3xl font-bold tracking-tight flex items-center gap-2"

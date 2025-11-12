@@ -11,22 +11,20 @@ export function PokemonCard({ pokemon }: Props) {
   return (
     <Link
       to={PATHS.POKEMON_DETAIL(pokemon.id.toString())}
-      className="flex flex-col rounded-2xl bg-white p-3 text-slate-800 shadow-[0_8px_20px_rgba(15,23,42,0.08)] transition hover:-translate-y-1 hover:shadow-[0_12px_24px_rgba(225,29,72,0.25)]"
+      className="flex flex-col rounded-2xl bg-white text-slate-800 shadow-[0_6px_8px_rgba(15,23,42,0.15)] transition hover:-translate-y-1 hover:shadow-[0_12px_24px_rgba(15,23,42,0.2)]"
     >
-      <div className="flex items-center justify-between text-xs font-semibold text-slate-400">
+      <div className="flex items-center justify-end text-lg font-normal text-slate-500 p-4">
         <span>#{pokemon.number.toString().padStart(3, "0")}</span>
-        <span className="text-rose-500">→</span>
       </div>
-      <div className="mt-2 flex flex-col items-center gap-3">
-        <div className="flex h-28 w-full items-center justify-center rounded-2xl bg-slate-100">
-          <img
-            src={pokemon.image}
-            alt={pokemon.name}
-            loading="lazy"
-            className="h-24 w-24 object-contain"
-          />
-        </div>
-        <p className="text-base font-semibold capitalize text-slate-800">
+      <div className="relative mt-2 flex flex-col items-center gap-3">
+        <div className="absolute bottom-0 flex h-[50%] w-full items-center justify-center rounded-2xl bg-[#efefef]"></div>
+        <img
+          src={pokemon.image}
+          alt={pokemon.name}
+          loading="lazy"
+          className="w-full object-contain z-10"
+        />
+        <p className="pb-8 font-semibold capitalize text-3xl text-slate-800 z-10">
           {pokemon.name}
         </p>
       </div>

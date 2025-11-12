@@ -1,6 +1,12 @@
-const Pokedex = ({ width = "40px", height = "40px", color = "#000000" }) => {
+const Pokedex = ({
+  width = "40px",
+  height = "40px",
+  color = "#000000",
+  style = {},
+}) => {
   return (
     <svg
+      style={style}
       xmlns="http://www.w3.org/2000/svg"
       fill={color}
       width={width}
