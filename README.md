@@ -61,9 +61,12 @@ Full-stack web app (React + Vite + Express) that recreates a modern Pokédex. Af
 
 ## Useful scripts
 
-- `npm run build`: compiles TypeScript and produces production assets.
-- `npm run preview`: serves the pre-built bundle.
-- `npm run lint`: runs ESLint across the project.
+- **`npm run backend`**: starts the Express server (required for the app to work).
+- **`npm run dev`**: launches the Vite dev server for local development.
+- **`npm run build`**: compiles TypeScript and produces production assets.
+- **`npm run preview`**: serves the pre-built bundle locally.
+- **`npm run lint`**: runs ESLint to check code quality.
+- **`npm run test`**: executes the project's test suite.
 
 ## Notes
 
