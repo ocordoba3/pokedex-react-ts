@@ -1,16 +1,11 @@
-type PaginationProps = {
+type Props = {
   page: number;
   totalPages: number;
   onPrev: () => void;
   onNext: () => void;
 };
 
-export function Pagination({
-  page,
-  totalPages,
-  onPrev,
-  onNext,
-}: PaginationProps) {
+export function Pagination({ page, totalPages, onPrev, onNext }: Props) {
   const isPrevDisabled = page <= 1;
   const isNextDisabled = page >= totalPages;
 

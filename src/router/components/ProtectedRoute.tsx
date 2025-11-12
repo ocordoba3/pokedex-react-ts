@@ -1,12 +1,13 @@
 import { Navigate, useLocation } from "react-router-dom";
 import type { ReactElement } from "react";
+
 import { useAuth } from "../../hooks/useAuth";
 
-type ProtectedRouteProps = {
+type Props = {
   children: ReactElement;
 };
 
-function ProtectedRoute({ children }: ProtectedRouteProps) {
+function ProtectedRoute({ children }: Props) {
   const { isAuthenticated } = useAuth();
   const location = useLocation();
 

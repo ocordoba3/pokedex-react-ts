@@ -1,3 +1,5 @@
+import type { SortOption } from "./ui.interface";
+
 export type PokemonListItem = {
   id: number;
   name: string;
@@ -26,5 +28,5 @@ export type PokemonListParams = {
   page?: number;
   limit?: number;
   search?: string;
-  sort?: "name" | "number";
+  sort?: SortOption;
 };

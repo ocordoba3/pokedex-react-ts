@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import Router from "./router";
 import { useAuth } from "./hooks/useAuth";
-import Pokedex from "./assets/icons/pokedex";
+import Pokedex from "./assets/icons/Pokedex";
 import { PATHS } from "./utils/paths";
 
 function App() {
@@ -35,7 +35,7 @@ function App() {
         )}
       </nav>
 
-      <main className="mx-auto max-w-5xl px-4 py-8 h-[calc(100vh-64px)] md:h-[calc(100vh-72px)] overflow-y-auto [&::-webkit-scrollbar-thumb]:bg-gray-700 [&::-webkit-scrollbar]:w-1.5">
+      <main className="w-full h-[calc(100vh-64px)] md:h-[calc(100vh-72px)] ">
         <Router />
       </main>
     </div>

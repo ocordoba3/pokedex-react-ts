@@ -1,14 +1,16 @@
 import { Link } from "react-router-dom";
-import type { PokemonListItem } from "../helpers/pokemon";
 
-type PokemonCardProps = {
+import type { PokemonListItem } from "../interfaces/pokemon.interface";
+import { PATHS } from "../utils/paths";
+
+type Props = {
   pokemon: PokemonListItem;
 };
 
-export function PokemonCard({ pokemon }: PokemonCardProps) {
+export function PokemonCard({ pokemon }: Props) {
   return (
     <Link
-      to={`/pokemon/${pokemon.id}`}
+      to={PATHS.POKEMON_DETAIL(pokemon.id.toString())}
       className="flex flex-col rounded-2xl bg-white p-3 text-slate-800 shadow-[0_8px_20px_rgba(15,23,42,0.08)] transition hover:-translate-y-1 hover:shadow-[0_12px_24px_rgba(225,29,72,0.25)]"
     >
       <div className="flex items-center justify-between text-xs font-semibold text-slate-400">

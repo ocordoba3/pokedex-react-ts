@@ -1,7 +1,9 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+
 import { getPokemonById } from "../helpers/pokemon";
 import useMetaTags from "../hooks/useMetaTags";
+import { PATHS } from "../utils/paths";
 
 function PokemonDetail() {
   const { id } = useParams<{ id: string }>();
@@ -38,7 +40,7 @@ function PokemonDetail() {
       <button
         type="button"
         className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500"
-        onClick={() => navigate(-1)}
+        onClick={() => navigate(PATHS.HOME, { replace: true })}
       >
         ← Back
       </button>

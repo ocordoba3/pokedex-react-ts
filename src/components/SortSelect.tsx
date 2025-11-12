@@ -1,16 +1,16 @@
-export type SortOption = "name" | "number";
+import type { SortOption, SortSelectOption } from "../interfaces/ui.interface";
 
-type SortSelectProps = {
+type Props = {
   value: SortOption;
   onChange: (value: SortOption) => void;
 };
 
-const options: Array<{ label: string; value: SortOption }> = [
+const options: Array<SortSelectOption> = [
   { label: "Number", value: "number" },
   { label: "Name", value: "name" },
 ];
 
-export function SortSelect({ value, onChange }: SortSelectProps) {
+export function SortSelect({ value, onChange }: Props) {
   return (
     <section className="rounded-3xl bg-white p-4 shadow-[0_6px_20px_rgba(15,23,42,0.15)]">
       <p className="text-sm font-semibold text-slate-600">Sort by:</p>

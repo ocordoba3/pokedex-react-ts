@@ -1,25 +1,18 @@
+import { Navigate, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import type { FormEvent } from "react";
-import { Navigate, useLocation, useNavigate } from "react-router-dom";
-import type { Location } from "react-router-dom";
+
+import { PATHS } from "../utils/paths";
 import { useAuth } from "../hooks/useAuth";
 import { useLoginMutation } from "../helpers/auth";
 import useMetaTags from "../hooks/useMetaTags";
-
-type LocationState = {
-  from?: Location;
-};
 
 function Login() {
   const { isAuthenticated, login } = useAuth();
   const loginMutation = useLoginMutation();
   const navigate = useNavigate();
-  const location = useLocation();
-  const state = location.state as LocationState | null;
-  const redirectTo = state?.from?.pathname ?? "/";
 
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
+  const [formData, setFormData] = useState({ username: "", password: "" });
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   useMetaTags({
@@ -28,25 +21,32 @@ function Login() {
   });
 
   if (isAuthenticated) {
-    return <Navigate to="/" replace />;
+    return <Navigate to={PATHS.HOME} replace />;
   }
+
+  const handleChange = (key: keyof typeof formData, value: string) => {
+    setFormData((prev) => ({ ...prev, [key]: value }));
+  };
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     setErrorMessage(null);
 
-    if (!username.trim() || !password.trim()) {
+    const username = formData.username.trim();
+    const password = formData.password.trim();
+
+    if (!username || !password) {
       setErrorMessage("Username and password are required.");
       return;
     }
 
     try {
       await loginMutation.mutateAsync({
-        username: username.trim(),
-        password: password.trim(),
+        username,
+        password,
       });
-      await login(username.trim(), password.trim());
-      navigate(redirectTo, { replace: true });
+      await login(username, password);
+      navigate(PATHS.HOME, { replace: true });
     } catch (error) {
       const message =
         error instanceof Error
@@ -57,7 +57,7 @@ function Login() {
   };
 
   return (
-    <section className="flex h-full items-center justify-center p-4">
+    <section className="flex h-full items-center justify-center mx-auto max-w-5xl px-4 py-8">
       <div className="w-full max-w-md rounded-2xl border border-slate-800 bg-white p-8 shadow-xl shadow-black/40">
         <header className="space-y-1 text-center">
           <h1 className="text-3xl font-bold text-slate-900">
@@ -74,27 +74,29 @@ function Login() {
           </p>
         ) : null}
 
-        <form className="mt-6 space-y-5" onSubmit={handleSubmit} noValidate>
+        <form className="mt-6 space-y-5" onSubmit={handleSubmit}>
           <label className="block space-y-1 text-sm">
             <span className="text-slate-500">Username</span>
             <input
-              className="w-full rounded-xl border border-slate-700 px-4 py-2.5 text-slate-900 outline-none transition focus:border-type-fighting"
-              value={username}
-              onChange={(event) => setUsername(event.target.value)}
-              placeholder="ash.ketchum"
               autoComplete="off"
+              className="w-full rounded-xl border border-slate-700 px-4 py-2.5 text-slate-900 outline-none transition focus:border-type-fighting"
+              onChange={(event) => handleChange("username", event.target.value)}
+              placeholder="ash.ketchum"
+              required
+              value={formData.username}
             />
           </label>
 
           <label className="block space-y-1 text-sm">
             <span className="text-slate-500">Password</span>
             <input
+              autoComplete="off"
               className="w-full rounded-xl border border-slate-700 px-4 py-2.5 text-slate-900 outline-none transition focus:border-type-fighting"
-              type="password"
-              value={password}
-              onChange={(event) => setPassword(event.target.value)}
+              onChange={(event) => handleChange("password", event.target.value)}
               placeholder="••••••••"
-              autoComplete="current-password"
+              required
+              type="password"
+              value={formData.password}
             />
           </label>
 
