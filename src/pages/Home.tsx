@@ -77,14 +77,14 @@ function Home() {
   }, [isSortOpen]);
 
   return (
-    <section className="flex w-full flex-col px-2 sm:px-4 lg:px-0">
-      <div className="bg-type-fighting p-4 text-white px-8">
-        <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
+    <section className="flex w-full flex-col">
+      <div className="bg-type-fighting px-4 md:px-8 text-white pb-4 md:pb-8">
+        <div className="flex gap-4 items-center">
           <SearchBar value={search} onChange={handleSearch} />
           <button
             id="sort-options-button"
             type="button"
-            className="cursor-pointer flex h-10 w-10 items-center justify-center rounded-full bg-white text-rose-600 shadow-[inset_0_2px_8px_rgba(15,23,42,0.1)]"
+            className="cursor-pointer flex p-2 items-center justify-center rounded-full bg-white text-rose-600 shadow-[inset_0_2px_8px_rgba(15,23,42,0.1)]"
             aria-label="Sort options"
             onClick={() => setIsSortOpen(true)}
           >
@@ -93,15 +93,15 @@ function Home() {
         </div>
       </div>
 
-      <div className="bg-type-fighting p-8">
-        <div className="bg-white rounded-4xl p-8 w-full ">
-          <div className="flex-1 rounded-4xl bg-white p-4">
+      <div className="bg-type-fighting p-2 md:p-8">
+        <div className="bg-white rounded-xl p-4 md:p-8 w-full ">
+          <div className="flex-1 rounded-4xl bg-white">
             {isLoading ? (
               <div className="flex h-64 items-center justify-center text-base font-semibold text-slate-500">
                 Loading Pokédex...
               </div>
             ) : isError ? (
-              <div className="rounded-2xl bg-rose-50 p-6 text-rose-600">
+              <div className="rounded-2xl bg-rose-50 p-6 text-type-fighting">
                 {(error as Error).message ||
                   "Unable to load Pokémon right now."}
               </div>
@@ -112,7 +112,7 @@ function Home() {
                     No Pokémon found matching your filters.
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6">
+                  <div className="grid grid-cols-3 gap-2 md:gap-8 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6">
                     {pokemons.map((pokemon) => (
                       <PokemonCard key={pokemon.id} pokemon={pokemon} />
                     ))}
@@ -142,20 +142,7 @@ function Home() {
           aria-modal="true"
           onClick={() => setIsSortOpen(false)}
         >
-          <div
-            className="relative w-full max-w-xs rounded-3xl bg-white p-6 shadow-2xl"
-            onClick={(event) => event.stopPropagation()}
-          >
-            <SortSelect value={sort} onChange={handleSort} />
-            <button
-              type="button"
-              className="text-xl text-white bg-type-psychic w-full mt-4 rounded-lg cursor-pointer hover:bg-type-psychic/90 px-4 py-1"
-              aria-label="Close sort options"
-              onClick={() => setIsSortOpen(false)}
-            >
-              Close
-            </button>
-          </div>
+          <SortSelect value={sort} onChange={handleSort} />
         </div>
       ) : null}
     </section>

@@ -12,9 +12,9 @@ const options: Array<SortSelectOption> = [
 
 export function SortSelect({ value, onChange }: Props) {
   return (
-    <section className="rounded-3xl bg-white p-4 shadow-[0_6px_20px_rgba(15,23,42,0.15)]">
-      <p className="text-sm font-semibold text-slate-600">Sort by:</p>
-      <div className="mt-3 space-y-3">
+    <section className="rounded-xl w-40 bg-type-fighting p-1 shadow-[0_6px_20px_rgba(15,23,42,0.15)]">
+      <p className="text-sm font-semibold text-white p-4">Sort by:</p>
+      <div className="space-y-3 bg-white p-4 rounded-xl">
         {options.map((option) => (
           <label
             key={option.value}
@@ -26,7 +26,7 @@ export function SortSelect({ value, onChange }: Props) {
               value={option.value}
               checked={value === option.value}
               onChange={(event) => onChange(event.target.value as SortOption)}
-              className="h-4 w-4 accent-rose-500"
+              className="h-4 w-4 accent-type-fighting"
             />
             {option.label}
           </label>

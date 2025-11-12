@@ -11,7 +11,7 @@ const TypeBadge = ({ primaryType }: Props) => {
 
   return (
     <span
-      className={`${bgColor} capitalize text-white rounded-2xl px-2 py-1 font-semibold`}
+      className={`${bgColor} capitalize text-white rounded-xl px-2 py-0.5 font-semibold`}
     >
       {primaryType}
     </span>

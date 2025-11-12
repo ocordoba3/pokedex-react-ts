@@ -35,15 +35,15 @@ const BaseStats = ({ bgColor, stats, textColor, bgOpacity }: Props) => {
         return (
           <div
             key={statName}
-            className="flex flex-col gap-2 text-slate-900 sm:flex-row sm:items-center"
+            className="flex gap-2 text-slate-900 sm:flex-row sm:items-center"
           >
-            <div className="flex items-center gap-4 sm:w-14 justify-end">
+            <div className="flex items-center gap-4 w-[15%] sm:w-14 justify-end">
               <span
                 className={`font-bold uppercase ${textColor} text-sm tracking-wide`}
               >
                 {label}
               </span>
-              <span className="hidden h-8 w-px bg-gray-200 sm:block" />
+              <span className="h-8 w-px bg-gray-200 sm:block" />
             </div>
             <div className="flex flex-1 items-center gap-4">
               <span className="font-semibold text-slate-700">

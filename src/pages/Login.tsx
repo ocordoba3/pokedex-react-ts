@@ -58,7 +58,7 @@ function Login() {
 
   return (
     <section className="flex h-[calc(100vh-72px)] items-center justify-center mx-auto max-w-5xl px-4">
-      <div className="w-full max-w-md rounded-2xl border border-slate-800 bg-white p-8 shadow-xl shadow-black/40">
+      <div className="w-full max-w-md rounded-2xl md:border md:border-slate-800 bg-white p-8 md:shadow-xl shadow-black/40">
         <header className="space-y-1 text-center">
           <h1 className="text-3xl font-bold text-slate-900">
             Sign in to your Pokédex

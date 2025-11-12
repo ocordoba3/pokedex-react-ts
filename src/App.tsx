@@ -12,7 +12,7 @@ function App() {
   return (
     <div className="min-h-screen bg-white text-slate-900">
       {!isDetailPage && (
-        <nav className="flex flex-nowrap justify-between items-center bg-type-fighting text-white px-4 py-2 md:px-8 md:py-4 sticky top-0 z-20">
+        <nav className="flex flex-nowrap justify-between items-center bg-type-fighting text-white pb-2 px-4 pt-4 md:px-8  sticky top-0 z-20">
           <Link
             to={PATHS.HOME}
             className="text-3xl font-bold tracking-tight flex items-center gap-2"
@@ -22,7 +22,7 @@ function App() {
           {isAuthenticated && (
             <div className="flex items-center gap-4 text-sm text-slate-400">
               <span className="text-white">
-                Trainer:{" "}
+                Hi,{" "}
                 <span className="font-bold text-lg capitalize">
                   {user ?? "guest"}
                 </span>
