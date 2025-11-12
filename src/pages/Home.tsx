@@ -37,7 +37,7 @@ function Home() {
     [page, sort, search]
   );
 
-  const { data, isLoading, error, isError, isFetching } = useQuery({
+  const { data, isLoading, error, isError } = useQuery({
     queryKey: ["pokemons", queryParams],
     queryFn: () => getPokemons(queryParams),
     placeholderData: keepPreviousData,
