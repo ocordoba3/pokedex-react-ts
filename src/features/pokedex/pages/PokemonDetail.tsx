@@ -21,10 +21,13 @@ import {
   SITE_NAME,
   getAbsoluteUrl,
 } from "../../../app/seo/helpers/seo";
+import { useEffect } from "react";
+import useUiStore from "../../../app/store/ui-store";
 
 function PokemonDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
+  const { startLoading, stopLoading } = useUiStore();
 
   const { data, isLoading, isError, error } = useQuery({
     queryKey: ["pokemon", id],
@@ -115,6 +118,15 @@ function PokemonDetail() {
       }
     : undefined;
 
+  const handleGoBack = () => {
+    const prevPath = localStorage.getItem("prevPath");
+    if (prevPath) {
+      navigate(prevPath, { replace: true });
+      return;
+    }
+    navigate(PATHS.HOME, { replace: true });
+  };
+
   useMetaTags({
     title: `Pokédex | ${formattedName}`,
     description: metaDescription,
@@ -124,17 +136,19 @@ function PokemonDetail() {
     structuredData,
   });
 
+  useEffect(() => {
+    if (isLoading) {
+      startLoading();
+    } else {
+      stopLoading();
+    }
+  }, [isLoading, startLoading, stopLoading]);
+
   if (isLoading) {
-    return (
-      <section className="w-full">
-        <div className="rounded-3xl bg-white/10 p-10 text-center text-slate-200">
-          Loading Pokémon data...
-        </div>
-      </section>
-    );
+    return null;
   }
 
-  if (isError && !isLoading) {
+  if (isError) {
     return (
       <section className="w-full">
         <div className="rounded-3xl bg-rose-50 p-6 text-rose-600">
@@ -153,15 +167,6 @@ function PokemonDetail() {
       </section>
     );
   }
-
-  const handleGoBack = () => {
-    const prevPath = localStorage.getItem("prevPath");
-    if (prevPath) {
-      navigate(prevPath, { replace: true });
-      return;
-    }
-    navigate(PATHS.HOME, { replace: true });
-  };
 
   return (
     <section className="w-full">

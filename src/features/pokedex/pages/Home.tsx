@@ -17,6 +17,7 @@ import type { PokemonListParams } from "../interfaces/pokemon.interface";
 import type { SortOption } from "../interfaces/list.interface";
 import useMetaTags from "../../../app/seo/hooks/useMetaTags";
 import NumberIcon from "../../../shared/components/icons/NumberIcon";
+import useUiStore from "../../../app/store/ui-store";
 
 const PAGE_LIMIT = 12;
 
@@ -26,6 +27,8 @@ function Home() {
   const sort = (params.get("sort") as SortOption) || "number";
   const search = params.get("search") || "";
   const [isSortOpen, setIsSortOpen] = useState(false);
+  const [hasLoaded, setHasLoaded] = useState(false);
+  const { startLoading, stopLoading } = useUiStore();
 
   const queryParams = useMemo<PokemonListParams>(
     () => ({
@@ -37,7 +40,7 @@ function Home() {
     [page, sort, search]
   );
 
-  const { data, isLoading, error, isError } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["pokemons", queryParams],
     queryFn: () => getPokemons(queryParams),
     placeholderData: keepPreviousData,
@@ -106,6 +109,19 @@ function Home() {
     return () => window.removeEventListener("keydown", onKey);
   }, [isSortOpen]);
 
+  useEffect(() => {
+    if (isLoading) {
+      startLoading();
+    } else {
+      stopLoading();
+    }
+  }, [isLoading, startLoading, stopLoading]);
+
+  useEffect(() => {
+    const timeout = window.setTimeout(() => setHasLoaded(true), 100);
+    return () => window.clearTimeout(timeout);
+  }, []);
+
   return (
     <section className="flex w-full flex-col">
       <div className="bg-type-fighting px-4 md:px-8 text-white pb-4 md:pb-8">
@@ -126,29 +142,22 @@ function Home() {
       <div className="bg-type-fighting p-2 md:p-8">
         <div className="bg-white rounded-xl p-4 md:p-8 w-full ">
           <div className="flex-1 rounded-4xl bg-white">
-            {isLoading ? (
-              <div className="flex h-64 items-center justify-center text-base font-semibold text-slate-500">
-                Loading Pokédex...
+            {(isError || pokemons.length === 0) && !isLoading && (
+              <div className="rounded-2xl bg-slate-50 p-10 text-center text-slate-500">
+                No Pokémon found matching your filters.
               </div>
-            ) : isError ? (
-              <div className="rounded-2xl bg-rose-50 p-6 text-type-fighting">
-                {(error as Error).message ||
-                  "Unable to load Pokémon right now."}
-              </div>
-            ) : (
+            )}
+            {!isLoading && pokemons.length > 0 && (
               <>
-                {pokemons.length === 0 ? (
-                  <div className="rounded-2xl bg-slate-50 p-10 text-center text-slate-500">
-                    No Pokémon found matching your filters.
-                  </div>
-                ) : (
-                  <div className="grid grid-cols-3 gap-2 md:gap-8 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6">
-                    {pokemons.map((pokemon) => (
-                      <PokemonCard key={pokemon.id} pokemon={pokemon} />
-                    ))}
-                  </div>
-                )}
-
+                <div
+                  className={`grid grid-cols-3 gap-2 md:gap-8 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6 transition-opacity duration-1000 ease-out ${
+                    hasLoaded ? "opacity-100" : "opacity-0"
+                  }`}
+                >
+                  {pokemons.map((pokemon) => (
+                    <PokemonCard key={pokemon.id} pokemon={pokemon} />
+                  ))}
+                </div>
                 <Pagination totalPages={totalPages} />
               </>
             )}
