@@ -1,11 +1,26 @@
+import { useSearchParams } from "react-router-dom";
+
 type Props = {
-  page: number;
   totalPages: number;
-  onPrev: () => void;
-  onNext: () => void;
 };
 
-export function Pagination({ page, totalPages, onPrev, onNext }: Props) {
+export function Pagination({ totalPages }: Props) {
+  const [params, setParams] = useSearchParams();
+  const page = Number(params.get("page")) || 1;
+  const handlePageChange = (amount: number) => {
+    if (
+      isNaN(Number(page)) ||
+      (page === 1 && amount === -1) ||
+      (page === totalPages && amount === 1)
+    ) {
+      return;
+    }
+    setParams((prev) => {
+      prev.set("page", (page + amount).toString());
+      return prev;
+    });
+  };
+
   const isPrevDisabled = page <= 1;
   const isNextDisabled = page >= totalPages;
 
@@ -14,7 +29,7 @@ export function Pagination({ page, totalPages, onPrev, onNext }: Props) {
       <button
         type="button"
         className="cursor-pointer rounded-full px-4 py-2 font-semibold text-rose-500 transition hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-40"
-        onClick={onPrev}
+        onClick={() => handlePageChange(-1)}
         disabled={isPrevDisabled}
       >
         Prev
@@ -26,7 +41,7 @@ export function Pagination({ page, totalPages, onPrev, onNext }: Props) {
       <button
         type="button"
         className="cursor-pointer rounded-full px-4 py-2 font-semibold text-rose-500 transition hover:bg-rose-50 disabled:cursor-not-allowed disabled:opacity-40"
-        onClick={onNext}
+        onClick={() => handlePageChange(1)}
         disabled={isNextDisabled}
       >
         Next

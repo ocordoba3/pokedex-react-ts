@@ -1,8 +1,9 @@
 import { useEffect, useMemo, useState } from "react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import { useSearchParams } from "react-router-dom";
 
 import { getPokemons } from "../helpers/pokemon";
-import Number from "../assets/icons/Number";
+import NumberIcon from "../assets/icons/Number";
 import Pagination from "../components/Pagination";
 import PokemonCard from "../components/PokemonCard";
 import SearchBar from "../components/SearchBar";
@@ -15,9 +16,10 @@ import useMetaTags from "../hooks/useMetaTags";
 const PAGE_LIMIT = 12;
 
 function Home() {
-  const [search, setSearch] = useState("");
-  const [sort, setSort] = useState<SortOption>("number");
-  const [page, setPage] = useState(1);
+  const [params, setParams] = useSearchParams();
+  const page = Number(params.get("page")) || 1;
+  const sort = (params.get("sort") as SortOption) || "number";
+  const search = params.get("search") || "";
   const [isSortOpen, setIsSortOpen] = useState(false);
 
   useMetaTags({
@@ -40,27 +42,28 @@ function Home() {
     queryFn: () => getPokemons(queryParams),
     placeholderData: keepPreviousData,
   });
-
   const pokemons = data?.data ?? [];
   const totalPages = data?.totalPages ?? 1;
 
   const handleSearch = (value: string) => {
-    setSearch(value);
-    setPage(1);
+    setParams((prev) => {
+      if (!value) {
+        prev.delete("search");
+      } else {
+        prev.set("search", value);
+      }
+      prev.delete("page");
+      return prev;
+    });
   };
 
   const handleSort = (value: SortOption) => {
-    setSort(value);
-    setPage(1);
+    setParams((prev) => {
+      prev.set("sort", value);
+      prev.delete("page");
+      return prev;
+    });
     setIsSortOpen(false);
-  };
-
-  const handlePrev = () => {
-    setPage((prev) => Math.max(1, prev - 1));
-  };
-
-  const handleNext = () => {
-    setPage((prev) => Math.min(totalPages, prev + 1));
   };
 
   useEffect(() => {
@@ -88,7 +91,7 @@ function Home() {
             aria-label="Sort options"
             onClick={() => setIsSortOpen(true)}
           >
-            {sort === "number" ? <Number /> : <SortName />}
+            {sort === "number" ? <NumberIcon /> : <SortName />}
           </button>
         </div>
       </div>
@@ -123,12 +126,7 @@ function Home() {
                   {isFetching ? "Refreshing..." : "\u00A0"}
                 </div>
 
-                <Pagination
-                  page={page}
-                  totalPages={totalPages}
-                  onPrev={handlePrev}
-                  onNext={handleNext}
-                />
+                <Pagination totalPages={totalPages} />
               </>
             )}
           </div>

@@ -85,6 +85,15 @@ function PokemonDetail() {
     );
   }
 
+  const handleGoBack = () => {
+    const prevPath = localStorage.getItem("prevPath");
+    if (prevPath) {
+      navigate(prevPath, { replace: true });
+      return;
+    }
+    navigate(PATHS.HOME, { replace: true });
+  };
+
   return (
     <section className="w-full">
       <article
@@ -105,7 +114,7 @@ function PokemonDetail() {
             <button
               type="button"
               className="cursor-pointer"
-              onClick={() => navigate(PATHS.HOME, { replace: true })}
+              onClick={handleGoBack}
             >
               <GoBack />
             </button>
@@ -122,7 +131,7 @@ function PokemonDetail() {
           <img
             src={data.image}
             alt={data.name}
-            className="w-[90%] md:w-1/2 object-contain drop-shadow-[0_35px_55px_rgba(0,0,0,0.35)]"
+            className="w-[90%] md:w-1/2 xl:w-[30%] object-contain drop-shadow-[0_35px_55px_rgba(0,0,0,0.35)]"
           />
         </figure>
 
