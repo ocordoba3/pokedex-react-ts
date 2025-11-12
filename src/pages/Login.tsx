@@ -7,6 +7,11 @@ import { useAuth } from "../hooks/useAuth";
 import { useLoginMutation } from "../helpers/auth";
 import useMetaTags from "../hooks/useMetaTags";
 import type { ErrorResp } from "../interfaces/auth.interface";
+import {
+  DEFAULT_OG_IMAGE,
+  SITE_NAME,
+  getAbsoluteUrl,
+} from "../utils/seo";
 
 function Login() {
   const { isAuthenticated, login } = useAuth();
@@ -16,9 +21,25 @@ function Login() {
   const [formData, setFormData] = useState({ username: "", password: "" });
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  const loginMetaDescription =
+    "Sign in to save your searches and access the full Pokédex experience faster.";
+
   useMetaTags({
-    title: "Pokédex | Login",
-    description: "Sign in to your Pokédex account.",
+    title: "Pokédex | Sign in",
+    description: loginMetaDescription,
+    image: DEFAULT_OG_IMAGE,
+    canonical: getAbsoluteUrl(PATHS.LOGIN),
+    structuredData: {
+      "@context": "https://schema.org",
+      "@type": "WebPage",
+      name: "Sign in to Pokédex",
+      description: loginMetaDescription,
+      url: getAbsoluteUrl(PATHS.LOGIN),
+      isPartOf: {
+        "@type": "WebSite",
+        name: SITE_NAME,
+      },
+    },
   });
 
   if (isAuthenticated) {

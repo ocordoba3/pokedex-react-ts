@@ -16,6 +16,7 @@ import BaseStats from "../components/BaseStats";
 import ChangePokemon from "../components/ChangePokemon";
 import Weight from "../assets/icons/Weight";
 import Rule from "../assets/icons/Rule";
+import { DEFAULT_OG_IMAGE, SITE_NAME, getAbsoluteUrl } from "../utils/seo";
 
 function PokemonDetail() {
   const { id } = useParams<{ id: string }>();
@@ -33,6 +34,8 @@ function PokemonDetail() {
   });
 
   const primaryType = data?.types?.[0]?.type?.name?.toLowerCase() ?? "normal";
+  const formattedPrimaryType =
+    primaryType.charAt(0).toUpperCase() + primaryType.slice(1);
   const bgColor =
     TYPE_BG_CLASS_MAP[primaryType as keyof typeof TYPE_BG_CLASS_MAP] ??
     TYPE_BG_CLASS_MAP.normal;
@@ -44,15 +47,77 @@ function PokemonDetail() {
     TYPE_BG_OPACITY_MAP[primaryType as keyof typeof TYPE_BG_OPACITY_MAP] ??
     TYPE_BG_OPACITY_MAP.normal;
 
+  const formattedName = data?.name
+    ? data.name.charAt(0).toUpperCase() + data.name.slice(1)
+    : "Loading...";
+  const heightText = data?.height ? `${data.height} m` : "an unknown height";
+  const weightText = data?.weight ? `${data.weight} kg` : "an unknown weight";
+  const canonicalFromId = id
+    ? getAbsoluteUrl(PATHS.POKEMON_DETAIL(id))
+    : getAbsoluteUrl(PATHS.HOME);
+
+  const metaDescription = data
+    ? `${formattedName} is a ${formattedPrimaryType}-type Pokémon with ${heightText} and ${weightText}. Review base stats, featured moves, and typing insights.`
+    : "Browse detailed Pokémon profiles with types, measurements, moves, and base stats.";
+
+  const statsProperties =
+    data?.stats?.map((stat) => ({
+      "@type": "PropertyValue",
+      name: stat.stat?.name ?? "stat",
+      value: stat.base_stat,
+    })) ?? [];
+
+  const structuredData = data
+    ? {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "BreadcrumbList",
+            itemListElement: [
+              {
+                "@type": "ListItem",
+                position: 1,
+                name: SITE_NAME,
+                item: getAbsoluteUrl(PATHS.HOME),
+              },
+              {
+                "@type": "ListItem",
+                position: 2,
+                name: formattedName,
+                item: canonicalFromId,
+              },
+            ],
+          },
+          {
+            "@type": "VideoGameCharacter",
+            name: formattedName,
+            description: metaDescription,
+            image: data.image ?? DEFAULT_OG_IMAGE,
+            url: canonicalFromId,
+            identifier: data.id,
+            inLanguage: "en",
+            height: data.height ? `${data.height} m` : undefined,
+            weight: data.weight ? `${data.weight} kg` : undefined,
+            additionalProperty: [
+              {
+                "@type": "PropertyValue",
+                name: "Primary type",
+                value: formattedPrimaryType,
+              },
+              ...statsProperties,
+            ],
+          },
+        ],
+      }
+    : undefined;
+
   useMetaTags({
-    title: `Pokédex | ${
-      data?.name
-        ? data.name.charAt(0).toUpperCase() + data.name.slice(1)
-        : "Pokemon Detail"
-    }`,
-    description: `Details and information about ${
-      data?.name ?? "this Pokémon"
-    }.`,
+    title: `Pokédex | ${formattedName}`,
+    description: metaDescription,
+    image: data?.image ?? DEFAULT_OG_IMAGE,
+    type: data ? "article" : "website",
+    canonical: canonicalFromId,
+    structuredData,
   });
 
   if (isLoading) {
@@ -190,11 +255,8 @@ function PokemonDetail() {
                   </p>
                 </div>
               </div>
-              {/* Fake description */}
               <p className="text-justify text-black my-8 md:my-16">
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex
-                debitis culpa reiciendis asperiores alias officiis fugit! Dolor
-                alias voluptate laboriosam?
+                {metaDescription}
               </p>
 
               <h2

@@ -12,6 +12,11 @@ import SortSelect from "../components/SortSelect";
 import type { PokemonListParams } from "../interfaces/pokemon.interface";
 import type { SortOption } from "../interfaces/ui.interface";
 import useMetaTags from "../hooks/useMetaTags";
+import {
+  DEFAULT_OG_IMAGE,
+  SITE_DESCRIPTION,
+  SITE_NAME,
+} from "../utils/seo";
 
 const PAGE_LIMIT = 12;
 
@@ -21,11 +26,6 @@ function Home() {
   const sort = (params.get("sort") as SortOption) || "number";
   const search = params.get("search") || "";
   const [isSortOpen, setIsSortOpen] = useState(false);
-
-  useMetaTags({
-    title: "Pokédex | Home",
-    description: "Browse and discover Pokémon in the Pokédex application.",
-  });
 
   const queryParams = useMemo<PokemonListParams>(
     () => ({
@@ -44,6 +44,31 @@ function Home() {
   });
   const pokemons = data?.data ?? [];
   const totalPages = data?.totalPages ?? 1;
+
+  const hasActiveFilters = Boolean(search.trim());
+  const pageTitle = hasActiveFilters
+    ? `Pokédex | Results for “${search.trim()}”`
+    : "Pokédex | Home";
+  const metaDescription = hasActiveFilters
+    ? `${pokemons.length || 0} Pokémon match “${search.trim()}”. Refine filters or change the sort order to find your favorites faster.`
+    : SITE_DESCRIPTION;
+
+  useMetaTags({
+    title: pageTitle,
+    description: metaDescription,
+    image: DEFAULT_OG_IMAGE,
+    structuredData: {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      name: pageTitle,
+      description: metaDescription,
+      isPartOf: {
+        "@type": "WebSite",
+        name: SITE_NAME,
+      },
+      numberOfItems: pokemons.length,
+    },
+  });
 
   const handleSearch = (value: string) => {
     setParams((prev) => {
