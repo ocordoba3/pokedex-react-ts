@@ -2,16 +2,16 @@ import { Navigate, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import type { FormEvent } from "react";
 
-import { PATHS } from "../utils/paths";
-import { useAuth } from "../hooks/useAuth";
-import { useLoginMutation } from "../helpers/auth";
-import useMetaTags from "../hooks/useMetaTags";
-import type { ErrorResp } from "../interfaces/auth.interface";
 import {
   DEFAULT_OG_IMAGE,
-  SITE_NAME,
   getAbsoluteUrl,
-} from "../utils/seo";
+  SITE_NAME,
+} from "../../../app/seo/helpers/seo";
+import { PATHS } from "../../../app/router/utils/paths";
+import { useAuth } from "../hooks/useAuth";
+import { useLoginMutation } from "../api/auth";
+import type { ErrorResp } from "../interfaces/auth.interface";
+import useMetaTags from "../../../app/seo/hooks/useMetaTags";
 
 function Login() {
   const { isAuthenticated, login } = useAuth();

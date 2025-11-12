@@ -1,4 +1,4 @@
-const Number = () => {
+const NumberIcon = () => {
   return (
     <svg
       width="22"
@@ -15,4 +15,4 @@ const Number = () => {
   );
 };
 
-export default Number;
+export default NumberIcon;

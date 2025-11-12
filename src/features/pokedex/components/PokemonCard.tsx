@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 
+import { PATHS } from "../../../app/router/utils/paths";
 import type { PokemonListItem } from "../interfaces/pokemon.interface";
-import { PATHS } from "../utils/paths";
 
 type Props = {
   pokemon: PokemonListItem;

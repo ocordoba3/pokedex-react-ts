@@ -2,21 +2,21 @@ import { useEffect, useMemo, useState } from "react";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 import { useSearchParams } from "react-router-dom";
 
-import { getPokemons } from "../helpers/pokemon";
-import NumberIcon from "../assets/icons/Number";
-import Pagination from "../components/Pagination";
+import { getPokemons } from "../api/pokemon";
+import {
+  SITE_DESCRIPTION,
+  DEFAULT_OG_IMAGE,
+  SITE_NAME,
+} from "../../../app/seo/helpers/seo";
+import Pagination from "../../../shared/components/Pagination";
 import PokemonCard from "../components/PokemonCard";
-import SearchBar from "../components/SearchBar";
-import SortName from "../assets/icons/SortName";
+import SearchBar from "../../../shared/components/SearchBar";
+import SortName from "../../../shared/components/icons/SortName";
 import SortSelect from "../components/SortSelect";
 import type { PokemonListParams } from "../interfaces/pokemon.interface";
-import type { SortOption } from "../interfaces/ui.interface";
-import useMetaTags from "../hooks/useMetaTags";
-import {
-  DEFAULT_OG_IMAGE,
-  SITE_DESCRIPTION,
-  SITE_NAME,
-} from "../utils/seo";
+import type { SortOption } from "../interfaces/list.interface";
+import useMetaTags from "../../../app/seo/hooks/useMetaTags";
+import NumberIcon from "../../../shared/components/icons/NumberIcon";
 
 const PAGE_LIMIT = 12;
 
@@ -50,7 +50,9 @@ function Home() {
     ? `Pokédex | Results for “${search.trim()}”`
     : "Pokédex | Home";
   const metaDescription = hasActiveFilters
-    ? `${pokemons.length || 0} Pokémon match “${search.trim()}”. Refine filters or change the sort order to find your favorites faster.`
+    ? `${
+        pokemons.length || 0
+      } Pokémon match “${search.trim()}”. Refine filters or change the sort order to find your favorites faster.`
     : SITE_DESCRIPTION;
 
   useMetaTags({

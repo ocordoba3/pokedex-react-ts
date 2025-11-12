@@ -1,12 +1,14 @@
 import { lazy } from "react";
 import { Route, Routes, Navigate } from "react-router-dom";
 
-import { PATHS } from "../utils/paths";
-import ProtectedRoute from "./components/ProtectedRoute";
+import { PATHS } from "./utils/paths";
+import ProtectedRoute from "../../features/auth/components/ProtectedRoute";
 
-const Home = lazy(() => import("../pages/Home"));
-const Login = lazy(() => import("../pages/Login"));
-const PokemonDetail = lazy(() => import("../pages/PokemonDetail"));
+const Home = lazy(() => import("../../features/pokedex/pages/Home"));
+const Login = lazy(() => import("../../features/auth/pages/Login"));
+const PokemonDetail = lazy(
+  () => import("../../features/pokedex/pages/PokemonDetail")
+);
 
 function Router() {
   return (

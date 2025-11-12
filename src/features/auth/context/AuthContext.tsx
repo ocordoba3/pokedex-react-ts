@@ -1,7 +1,7 @@
 import { createContext, useCallback, useMemo, useState } from "react";
 import type { ReactNode } from "react";
 
-import { setAuthToken } from "../helpers/api";
+import { setAuthToken } from "../../../lib/api";
 
 type AuthContextValue = {
   user: string | null;

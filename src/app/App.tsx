@@ -1,8 +1,8 @@
 import { Link, useLocation } from "react-router-dom";
 import Router from "./router";
-import { useAuth } from "./hooks/useAuth";
-import Pokedex from "./assets/icons/Pokedex";
-import { PATHS } from "./utils/paths";
+import { useAuth } from "../features/auth/hooks/useAuth";
+import Pokedex from "../shared/components/icons/Pokedex";
+import { PATHS } from "./router/utils/paths";
 
 function App() {
   const { isAuthenticated, user, logout } = useAuth();

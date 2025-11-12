@@ -1,22 +1,26 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
-import { getPokemonById } from "../helpers/pokemon";
-import { PATHS } from "../utils/paths";
+import { getPokemonById } from "../api/pokemon";
+import { PATHS } from "../../../app/router/utils/paths";
 import {
   TYPE_BG_CLASS_MAP,
   TYPE_BG_OPACITY_MAP,
   TYPE_TEXT_COLOR_CLASS_MAP,
-} from "../utils/map-styles";
-import GoBack from "../assets/icons/GoBack";
-import Pokedex from "../assets/icons/Pokedex";
-import useMetaTags from "../hooks/useMetaTags";
-import TypeBadge from "../components/TypeBadge";
+} from "../../../shared/utils/map-styles";
 import BaseStats from "../components/BaseStats";
 import ChangePokemon from "../components/ChangePokemon";
-import Weight from "../assets/icons/Weight";
-import Rule from "../assets/icons/Rule";
-import { DEFAULT_OG_IMAGE, SITE_NAME, getAbsoluteUrl } from "../utils/seo";
+import TypeBadge from "../../../shared/components/TypeBadge";
+import useMetaTags from "../../../app/seo/hooks/useMetaTags";
+import GoBack from "../../../shared/components/icons/GoBack";
+import Pokedex from "../../../shared/components/icons/Pokedex";
+import Weight from "../../../shared/components/icons/Weight";
+import Rule from "../../../shared/components/icons/Rule";
+import {
+  DEFAULT_OG_IMAGE,
+  SITE_NAME,
+  getAbsoluteUrl,
+} from "../../../app/seo/helpers/seo";
 
 function PokemonDetail() {
   const { id } = useParams<{ id: string }>();

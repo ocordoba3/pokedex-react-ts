@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 
-import { DEFAULT_OG_IMAGE, SITE_NAME } from "../utils/seo";
+import { DEFAULT_OG_IMAGE, SITE_NAME } from "../helpers/seo";
 
 type MetaInput = {
   title: string;
@@ -45,15 +45,16 @@ const STRUCTURED_DATA_ID = "structured-data";
 const upsertStructuredData = (
   data?: Record<string, unknown> | Array<Record<string, unknown>>
 ) => {
-  const existing = document.getElementById(STRUCTURED_DATA_ID);
+  const existing = document.getElementById(
+    STRUCTURED_DATA_ID
+  ) as HTMLScriptElement | null;
 
   if (!data) {
     existing?.remove();
     return;
   }
 
-  const script =
-    existing ?? document.createElement("script");
+  const script = existing ?? document.createElement("script");
 
   if (!existing) {
     script.type = "application/ld+json";
@@ -80,10 +81,9 @@ const useMetaTags = ({
       canonical || window.location.href || window.location.origin;
 
     document.title = title;
-    ensureMetaTag('meta[name="description"]', { name: "description" }).setAttribute(
-      "content",
-      description
-    );
+    ensureMetaTag('meta[name="description"]', {
+      name: "description",
+    }).setAttribute("content", description);
 
     const canonicalLink = ensureLinkTag("canonical");
     canonicalLink.setAttribute("href", resolvedCanonical);

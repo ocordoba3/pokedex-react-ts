@@ -1,4 +1,4 @@
-import type { SortOption } from "./ui.interface";
+import type { SortOption } from "./list.interface";
 
 export type PokemonListItem = {
   id: number;

@@ -1,4 +1,7 @@
-import type { SortOption, SortSelectOption } from "../interfaces/ui.interface";
+import type {
+  SortOption,
+  SortSelectOption,
+} from "../interfaces/list.interface";
 
 type Props = {
   value: SortOption;
