@@ -1,6 +1,6 @@
 import { createContext, useCallback, useMemo, useState } from "react";
 import type { ReactNode } from "react";
-import { setAuthToken } from "../services/api";
+import { setAuthToken } from "../helpers/api";
 
 type AuthContextValue = {
   user: string | null;
@@ -25,9 +25,7 @@ const getStoredSession = () => {
   };
 };
 
-export const AuthContext = createContext<AuthContextValue | undefined>(
-  undefined
-);
+const AuthContext = createContext<AuthContextValue | undefined>(undefined);
 
 type AuthProviderProps = {
   children: ReactNode;
@@ -71,3 +69,5 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
 }
+
+export default AuthContext;

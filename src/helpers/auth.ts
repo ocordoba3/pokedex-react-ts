@@ -1,15 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 import { api, setAuthToken } from "./api";
-
-export type LoginResponse = {
-  token: string;
-  [key: string]: unknown;
-};
-
-export type LoginVariables = {
-  username: string;
-  password: string;
-};
+import type { LoginResponse, LoginBody } from "../interfaces/auth.interface";
 
 export async function loginRequest(
   username: string,
@@ -24,7 +15,7 @@ export async function loginRequest(
 }
 
 export function useLoginMutation() {
-  return useMutation<LoginResponse, Error, LoginVariables>({
+  return useMutation<LoginResponse, Error, LoginBody>({
     mutationFn: ({ username, password }) => loginRequest(username, password),
     onSuccess: (data) => {
       if (data.token) {

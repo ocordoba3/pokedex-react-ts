@@ -4,7 +4,9 @@ import SearchBar from "../components/SearchBar";
 import SortSelect, { type SortOption } from "../components/SortSelect";
 import PokemonCard from "../components/PokemonCard";
 import Pagination from "../components/Pagination";
-import { getPokemons, type PokemonListParams } from "../services/pokemon";
+import { getPokemons } from "../helpers/pokemon";
+import type { PokemonListParams } from "../interfaces/pokemon.interface";
+import useMetaTags from "../hooks/useMetaTags";
 
 const PAGE_LIMIT = 12;
 
@@ -12,6 +14,11 @@ function Home() {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState<SortOption>("number");
   const [page, setPage] = useState(1);
+
+  useMetaTags({
+    title: "Pokédex | Home",
+    description: "Browse and discover Pokémon in the Pokédex application.",
+  });
 
   const queryParams = useMemo<PokemonListParams>(
     () => ({
@@ -23,13 +30,7 @@ function Home() {
     [page, sort, search]
   );
 
-  const {
-    data,
-    isLoading,
-    error,
-    isError,
-    isFetching,
-  } = useQuery({
+  const { data, isLoading, error, isError, isFetching } = useQuery({
     queryKey: ["pokemons", queryParams],
     queryFn: () => getPokemons(queryParams),
     placeholderData: keepPreviousData,
@@ -62,7 +63,9 @@ function Home() {
         <div className="flex items-center justify-between">
           <div>
             <p className="text-2xl font-bold">Pokédex</p>
-            <p className="text-sm text-rose-100">Track every Pokémon you love</p>
+            <p className="text-sm text-rose-100">
+              Track every Pokémon you love
+            </p>
           </div>
           <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/20 text-2xl">
             🕹️
@@ -82,7 +85,7 @@ function Home() {
       </div>
 
       <div className="flex flex-col gap-6 lg:flex-row">
-        <div className="flex-1 rounded-[32px] bg-white p-4 shadow-[0_25px_45px_rgba(15,23,42,0.15)]">
+        <div className="flex-1 rounded-4xl bg-white p-4 shadow-[0_25px_45px_rgba(15,23,42,0.15)]">
           {isLoading ? (
             <div className="flex h-64 items-center justify-center text-base font-semibold text-slate-500">
               Loading Pokédex...

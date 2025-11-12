@@ -3,7 +3,8 @@ import type { FormEvent } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import type { Location } from "react-router-dom";
 import { useAuth } from "../hooks/useAuth";
-import { useLoginMutation } from "../services/auth";
+import { useLoginMutation } from "../helpers/auth";
+import useMetaTags from "../hooks/useMetaTags";
 
 type LocationState = {
   from?: Location;
@@ -20,6 +21,11 @@ function Login() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+
+  useMetaTags({
+    title: "Pokédex | Login",
+    description: "Sign in to your Pokédex account.",
+  });
 
   if (isAuthenticated) {
     return <Navigate to="/" replace />;

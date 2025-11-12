@@ -2,9 +2,9 @@ import express, { Request, Response } from "express";
 import cors from "cors";
 import axios, { AxiosError } from "axios";
 
-const PORT = process.env.PORT ?? 3000;
-const ALLOWED_ORIGIN = "http://localhost:5173";
-const POKE_API_BASE = "https://pokeapi.co/api/v2";
+const PORT = process.env.VITE_PORT ?? 3000;
+const ALLOWED_ORIGIN = process.env.VITE_ALLOWED_ORIGIN;
+const POKE_API_BASE = process.env.VITE_POKE_API_BASE;
 const LIST_LIMIT = 2000; // enough to cover current Pokédex entries
 
 type PokemonListEntry = {
@@ -43,12 +43,11 @@ async function ensurePokemonList(): Promise<PokemonListEntry[]> {
     return cachedPokemonList;
   }
 
-  const response = await axios.get<{ results: Array<{ name: string; url: string }> }>(
-    `${POKE_API_BASE}/pokemon`,
-    {
-      params: { limit: LIST_LIMIT },
-    }
-  );
+  const response = await axios.get<{
+    results: Array<{ name: string; url: string }>;
+  }>(`${POKE_API_BASE}/pokemon`, {
+    params: { limit: LIST_LIMIT },
+  });
 
   cachedPokemonList = response.data.results.map((item) => {
     const idMatch = item.url.match(/\/pokemon\/(\d+)\//);
@@ -68,7 +67,8 @@ app.get("/pokemons", async (req: Request, res: Response) => {
   try {
     const page = Math.max(1, Number(req.query.page) || 1);
     const limit = Math.max(1, Math.min(100, Number(req.query.limit) || 20));
-    const search = (req.query.search as string | undefined)?.toLowerCase() ?? "";
+    const search =
+      (req.query.search as string | undefined)?.toLowerCase() ?? "";
     const sortParam = req.query.sort === "name" ? "name" : "number";
 
     const list = await ensurePokemonList();

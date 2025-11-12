@@ -1,6 +1,7 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { getPokemonById } from "../services/pokemon";
+import { getPokemonById } from "../helpers/pokemon";
+import useMetaTags from "../hooks/useMetaTags";
 
 function PokemonDetail() {
   const { id } = useParams<{ id: string }>();
@@ -20,7 +21,18 @@ function PokemonDetail() {
   const abilities = data?.abilities ?? [];
   const moves = data?.moves ?? [];
   const forms = data?.forms ?? [];
-  console.log(data);
+
+  useMetaTags({
+    title: `Pokédex | ${
+      data?.name
+        ? data.name.charAt(0).toUpperCase() + data.name.slice(1)
+        : "Pokemon Detail"
+    }`,
+    description: `Details and information about ${
+      data?.name ?? "this Pokémon"
+    }.`,
+  });
+
   return (
     <section className="mx-auto max-w-3xl space-y-6 pb-10">
       <button

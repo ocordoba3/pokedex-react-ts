@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import type { PokemonListItem } from "../services/pokemon";
+import type { PokemonListItem } from "../helpers/pokemon";
 
 type PokemonCardProps = {
   pokemon: PokemonListItem;
