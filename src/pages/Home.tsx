@@ -122,10 +122,6 @@ function Home() {
                   </div>
                 )}
 
-                <div className="mt-4 text-right text-xs font-medium text-slate-400">
-                  {isFetching ? "Refreshing..." : "\u00A0"}
-                </div>
-
                 <Pagination totalPages={totalPages} />
               </>
             )}

@@ -6,6 +6,7 @@ import { PATHS } from "../utils/paths";
 import { useAuth } from "../hooks/useAuth";
 import { useLoginMutation } from "../helpers/auth";
 import useMetaTags from "../hooks/useMetaTags";
+import type { ErrorResp } from "../interfaces/auth.interface";
 
 function Login() {
   const { isAuthenticated, login } = useAuth();
@@ -49,9 +50,8 @@ function Login() {
       navigate(PATHS.HOME, { replace: true });
     } catch (error) {
       const message =
-        error instanceof Error
-          ? error.message
-          : "Unexpected error. Please try again.";
+        (error as ErrorResp)?.response?.data?.message ??
+        "Unexpected error. Please try again.";
       setErrorMessage(message);
     }
   };
