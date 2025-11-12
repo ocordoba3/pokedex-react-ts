@@ -2,30 +2,17 @@ import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 
 import { getPokemonById } from "../helpers/pokemon";
-import useMetaTags from "../hooks/useMetaTags";
 import { PATHS } from "../utils/paths";
+import {
+  TYPE_BG_CLASS_MAP,
+  TYPE_BG_OPACITY_MAP,
+  TYPE_TEXT_COLOR_CLASS_MAP,
+} from "../utils/map-styles";
+import GoBack from "../assets/icons/GoBack";
 import Pokedex from "../assets/icons/Pokedex";
-
-const TYPE_BG_CLASS_MAP = {
-  bug: "bg-type-bug",
-  dark: "bg-type-dark",
-  dragon: "bg-type-dragon",
-  electric: "bg-type-electric",
-  fairy: "bg-type-fairy",
-  fighting: "bg-type-fighting",
-  fire: "bg-type-fire",
-  flying: "bg-type-flying",
-  ghost: "bg-type-ghost",
-  normal: "bg-type-normal",
-  grass: "bg-type-grass",
-  ground: "bg-type-ground",
-  ice: "bg-type-ice",
-  poison: "bg-type-poison",
-  psychic: "bg-type-psychic",
-  rock: "bg-type-rock",
-  steel: "bg-type-steel",
-  water: "bg-type-water",
-} as const;
+import useMetaTags from "../hooks/useMetaTags";
+import TypeBadge from "../components/TypeBadge";
+import BaseStats from "../components/BaseStats";
 
 function PokemonDetail() {
   const { id } = useParams<{ id: string }>();
@@ -42,13 +29,17 @@ function PokemonDetail() {
     enabled: Boolean(id),
   });
 
-  const abilities = data?.abilities ?? [];
-  const moves = data?.moves ?? [];
-  const forms = data?.forms ?? [];
   const primaryType = data?.types?.[0]?.type?.name?.toLowerCase() ?? "normal";
   const bgColor =
     TYPE_BG_CLASS_MAP[primaryType as keyof typeof TYPE_BG_CLASS_MAP] ??
     TYPE_BG_CLASS_MAP.normal;
+  const textColor =
+    TYPE_TEXT_COLOR_CLASS_MAP[
+      primaryType as keyof typeof TYPE_TEXT_COLOR_CLASS_MAP
+    ] ?? TYPE_TEXT_COLOR_CLASS_MAP.normal;
+  const bgOpacity =
+    TYPE_BG_OPACITY_MAP[primaryType as keyof typeof TYPE_BG_OPACITY_MAP] ??
+    TYPE_BG_OPACITY_MAP.normal;
 
   useMetaTags({
     title: `Pokédex | ${
@@ -61,122 +52,134 @@ function PokemonDetail() {
     }.`,
   });
 
-  return (
-    <section className="mx-auto max-w-3xl space-y-6 pb-10">
-      <button
-        type="button"
-        className="inline-flex items-center gap-2 text-sm font-semibold text-slate-500"
-        onClick={() => navigate(PATHS.HOME, { replace: true })}
-      >
-        ← Back
-      </button>
-
-      {isLoading ? (
+  if (isLoading) {
+    return (
+      <section className="w-full">
         <div className="rounded-3xl bg-white/10 p-10 text-center text-slate-200">
           Loading Pokémon data...
         </div>
-      ) : isError ? (
+      </section>
+    );
+  }
+
+  if (isError && !isLoading) {
+    return (
+      <section className="w-full">
         <div className="rounded-3xl bg-rose-50 p-6 text-rose-600">
           {(error as Error).message || "Unable to load Pokémon details."}
         </div>
-      ) : data ? (
-        <div className={`relative overflow-hidden rounded-4xl ${bgColor}`}>
-          <Pokedex
-            color="#FFFFFF20"
-            width="600px"
-            height="600px"
-            style={{ position: "absolute", right: 0, top: 0 }}
-          />
-          <div className="relative px-6 pb-32 pt-6 text-white">
-            <div className="flex items-center justify-between">
-              <h1 className="text-3xl font-bold capitalize">{data.name}</h1>
-              <p className="text-sm font-semibold">
-                #{data.id.toString().padStart(3, "0")}
-              </p>
-            </div>
+      </section>
+    );
+  }
 
-            <div className="absolute inset-0 -z-10 opacity-20">
-              <div className="h-full w-full bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.2),transparent_45%)]" />
-            </div>
-
-            <div className="mt-6 flex justify-center">
-              <img
-                src={data.image}
-                alt={data.name}
-                className="w-1/2 object-contain drop-shadow-[0_35px_55px_rgba(0,0,0,0.35)]"
-              />
-            </div>
-          </div>
-
-          <div className="rounded-t-4xl bg-white px-6 py-8 text-slate-700">
-            {data.description ? (
-              <p className="text-center text-sm text-slate-500">
-                {data.description}
-              </p>
-            ) : null}
-
-            <div className="mt-8 grid gap-4 md:grid-cols-3">
-              <InfoCard title="Abilities" items={abilities} tone="rose" />
-              <InfoCard title="Moves" items={moves} limit={12} tone="orange" />
-              <InfoCard title="Forms" items={forms} tone="indigo" />
-            </div>
-          </div>
-        </div>
-      ) : (
+  if (!data) {
+    return (
+      <section className="w-full">
         <div className="rounded-3xl bg-white/10 p-10 text-center text-slate-200">
           Pokémon not found.
         </div>
-      )}
-    </section>
-  );
-}
-
-type InfoCardProps = {
-  title: string;
-  items: unknown[];
-  limit?: number;
-  tone?: "rose" | "orange" | "indigo";
-};
-
-function InfoCard({ title, items, limit, tone = "rose" }: InfoCardProps) {
-  const list = typeof limit === "number" ? items.slice(0, limit) : items;
-  const toneClasses: Record<typeof tone, string> = {
-    rose: "from-rose-50 to-rose-100 text-rose-600",
-    orange: "from-orange-50 to-orange-100 text-orange-600",
-    indigo: "from-indigo-50 to-indigo-100 text-indigo-600",
-  } as const;
-  const badgeClasses: Record<typeof tone, string> = {
-    rose: "bg-rose-100 text-rose-600",
-    orange: "bg-orange-100 text-orange-600",
-    indigo: "bg-indigo-100 text-indigo-600",
-  } as const;
+      </section>
+    );
+  }
 
   return (
-    <article className="flex flex-col rounded-2xl bg-linear-to-br from-white to-slate-50 p-4 shadow-[0_12px_25px_rgba(15,23,42,0.08)]">
-      <div className="mb-3 flex items-center justify-between">
-        <h2 className={`text-lg font-semibold ${toneClasses[tone]}`}>
-          {title}
-        </h2>
-        <span className="text-xs text-slate-400">
-          {items.length} item{items.length === 1 ? "" : "s"}
-        </span>
-      </div>
-
-      {list.length === 0 ? (
-        <p className="text-sm text-slate-400">No data available.</p>
-      ) : (
-        <ul className="space-y-2 overflow-auto pr-2 text-sm text-slate-700">
-          {list.map((item, idx) => (
-            <li
-              key={idx}
-              className={`rounded-full px-4 py-2 capitalize ${badgeClasses[tone]}`}
+    <section className="w-full">
+      <article
+        className={`flex justify-center relative overflow-y-auto h-screen ${bgColor}`}
+      >
+        {/* Background image */}
+        <Pokedex
+          color="#FFFFFF20"
+          width="600px"
+          height="600px"
+          style={{ position: "absolute", right: 0, top: 0 }}
+        />
+        {/* Go back, Name and ID */}
+        <header className="absolute top-0 px-6 pb-32 pt-6 text-white w-full flex items-center justify-between">
+          <div className="flex gap-4 items-center">
+            <button
+              type="button"
+              className="cursor-pointer"
+              onClick={() => navigate(PATHS.HOME, { replace: true })}
             >
-              {String(item)}
-            </li>
-          ))}
-        </ul>
-      )}
-    </article>
+              <GoBack />
+            </button>
+            <h1 className="text-5xl font-bold capitalize">{data.name}</h1>
+          </div>
+          <p className="text-lg font-semibold">
+            #{data.id.toString().padStart(3, "0")}
+          </p>
+        </header>
+        {/* Image */}
+        <figure className="z-10 absolute top-[10%] w-[90%] flex justify-center">
+          <img
+            src={data.image}
+            alt={data.name}
+            className="w-1/2 object-contain drop-shadow-[0_35px_55px_rgba(0,0,0,0.35)]"
+          />
+        </figure>
+
+        {/* Info Cards */}
+        <div
+          className={`absolute -bottom-[400px] p-4 ${bgColor} px-6 py-8 text-slate-700 w-full`}
+        >
+          <div className="rounded-t-4xl p-4 bg-white relative">
+            <div className="p-6">
+              {/* Type badges */}
+              <div className="flex gap-8 w-full justify-center mb-8 mt-20">
+                {data.types?.map((type) => (
+                  <TypeBadge
+                    key={type.type.name}
+                    primaryType={type.type.name}
+                  />
+                ))}
+              </div>
+              <h2
+                className={`w-full text-center text-xl font-bold ${textColor} mb-8`}
+              >
+                About
+              </h2>
+              <div className="grid grid-col-1 md:grid-cols-3 justify-center">
+                <div className="grid gap-2 justify-center border-r border-gray-300">
+                  <p className="text-xl">{data.weight} Kg</p>
+                  <p className="self-end text-sm text-slate-400">Weight</p>
+                </div>
+                <div className="grid gap-2 justify-center border-r border-gray-300">
+                  <p className="text-xl">{data.height} m</p>
+                  <p className="self-end text-sm text-slate-400">Height</p>
+                </div>
+                <div className="grid gap-2 justify-center">
+                  <ul>
+                    {data.moves?.slice(0, 2).map((move, idx) => (
+                      <li key={idx}>{move.move.name}</li>
+                    ))}
+                  </ul>
+                  <p className="self-end text-sm text-slate-400">Moves</p>
+                </div>
+              </div>
+              {/* Fake description */}
+              <p className="text-justify text-black my-16">
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Ex
+                debitis culpa reiciendis asperiores alias officiis fugit! Dolor
+                alias voluptate laboriosam?
+              </p>
+
+              <h2
+                className={`w-full text-xl text-center font-bold ${textColor} mb-8`}
+              >
+                Base Stats
+              </h2>
+              <BaseStats
+                bgColor={bgColor}
+                bgOpacity={bgOpacity}
+                stats={data.stats}
+                textColor={textColor}
+              />
+            </div>
+          </div>
+        </div>
+      </article>
+    </section>
   );
 }
 

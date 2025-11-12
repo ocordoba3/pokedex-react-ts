@@ -57,7 +57,7 @@ function Login() {
   };
 
   return (
-    <section className="flex h-full items-center justify-center mx-auto max-w-5xl px-4 py-8">
+    <section className="flex h-[calc(100vh-72px)] items-center justify-center mx-auto max-w-5xl px-4">
       <div className="w-full max-w-md rounded-2xl border border-slate-800 bg-white p-8 shadow-xl shadow-black/40">
         <header className="space-y-1 text-center">
           <h1 className="text-3xl font-bold text-slate-900">
@@ -69,7 +69,7 @@ function Login() {
         </header>
 
         {errorMessage ? (
-          <p className="mt-6 rounded-lg bg-rose-500/15 px-4 py-3 text-sm font-medium text-rose-100">
+          <p className="mt-6 rounded-lg bg-type-fairy px-4 py-3 text-sm font-medium text-white">
             {errorMessage}
           </p>
         ) : null}

@@ -1,6 +1,7 @@
-import express, { Request, Response } from "express";
-import cors from "cors";
+import "dotenv/config";
 import axios, { AxiosError } from "axios";
+import cors from "cors";
+import express, { Request, Response } from "express";
 
 const PORT = process.env.VITE_PORT ?? 3000;
 const ALLOWED_ORIGIN = process.env.VITE_ALLOWED_ORIGIN;

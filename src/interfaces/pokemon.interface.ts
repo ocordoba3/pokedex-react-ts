@@ -20,8 +20,9 @@ export type PokemonDetail = PokemonListItem & {
   weight?: number;
   types?: TypesObj[];
   abilities?: string[];
-  moves?: string[];
+  moves?: Moves[];
   forms?: string[];
+  stats: PokemonStats[];
 };
 
 export type PokemonListParams = {
@@ -33,8 +34,25 @@ export type PokemonListParams = {
 
 type TypesObj = {
   slot: number;
-  type: {
-    name: string;
-    url: string;
-  };
+  type: CommonObj;
 };
+
+type Moves = {
+  move: CommonObj;
+};
+
+type CommonObj = {
+  name: string;
+  url: string;
+};
+
+export interface PokemonStats {
+  base_stat: number;
+  effort: number;
+  stat: Stat;
+}
+
+export interface Stat {
+  name: string;
+  url: string;
+}
