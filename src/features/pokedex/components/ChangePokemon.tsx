@@ -15,7 +15,7 @@ const ChangePokemon = () => {
   };
 
   return (
-    <div className="w-full absolute top-[25%] md:top-[45%] z-30 flex justify-between px-4 md:px-8">
+    <div className="w-full absolute top-[50%] z-30 flex justify-between px-4 md:px-8">
       <button
         disabled={isFirstPokemon}
         style={{

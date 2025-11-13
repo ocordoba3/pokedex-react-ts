@@ -40,7 +40,7 @@ function Home() {
     [page, sort, search]
   );
 
-  const { data, isLoading, isError } = useQuery({
+  const { data, isError, isFetching } = useQuery({
     queryKey: ["pokemons", queryParams],
     queryFn: () => getPokemons(queryParams),
     placeholderData: keepPreviousData,
@@ -110,12 +110,12 @@ function Home() {
   }, [isSortOpen]);
 
   useEffect(() => {
-    if (isLoading) {
+    if (isFetching) {
       startLoading();
     } else {
       stopLoading();
     }
-  }, [isLoading, startLoading, stopLoading]);
+  }, [isFetching, startLoading, stopLoading]);
 
   useEffect(() => {
     const timeout = window.setTimeout(() => setHasLoaded(true), 100);
@@ -142,12 +142,12 @@ function Home() {
       <div className="bg-type-fighting p-2 md:p-8">
         <div className="bg-white rounded-xl p-4 md:p-8 w-full ">
           <div className="flex-1 rounded-4xl bg-white">
-            {(isError || pokemons.length === 0) && !isLoading && (
+            {(isError || pokemons.length === 0) && !isFetching && (
               <div className="rounded-2xl bg-slate-50 p-10 text-center text-slate-500">
                 No Pokémon found matching your filters.
               </div>
             )}
-            {!isLoading && pokemons.length > 0 && (
+            {!isFetching && pokemons.length > 0 && (
               <>
                 <div
                   className={`grid grid-cols-3 gap-2 md:gap-8 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6 transition-opacity duration-1000 ease-out ${

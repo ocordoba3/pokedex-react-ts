@@ -171,23 +171,14 @@ function PokemonDetail() {
   return (
     <section className="w-full">
       <article
-        className={`flex justify-center relative overflow-y-auto h-screen ${bgColor}`}
+        className={`flex flex-wrap justify-center relative overflow-y-auto min-h-screen ${bgColor}`}
       >
-        {/* Background image */}
-        {/* Desktop */}
-        <div className="hidden md:block absolute top-0 right-0">
-          <Pokedex color="#FFFFFF10" width="600px" height="600px" />
-        </div>
-        {/* Mobile */}
-        <div className="md:hidden absolute top-0 right-0">
-          <Pokedex color="#FFFFFF10" width="300px" height="300px" />
-        </div>
         {/* Go back, Name and ID */}
-        <header className="absolute top-0 px-6 pt-6 text-white w-full flex items-center justify-between z-20">
+        <header className="h-fit px-6 pt-6 text-white w-full flex items-center justify-between z-20">
           <div className="flex gap-4 items-center">
             <button
               type="button"
-              className="cursor-pointer"
+              className="cursor-pointer hover:shadow-lg transition-shadow rounded-full"
               onClick={handleGoBack}
             >
               <GoBack />
@@ -200,86 +191,94 @@ function PokemonDetail() {
             #{data.id.toString().padStart(3, "0")}
           </p>
         </header>
+        {/* Background image */}
+        {/* Desktop */}
+        <div className="hidden md:block absolute top-0 right-0">
+          <Pokedex color="#FFFFFF10" width="600px" height="600px" />
+        </div>
+        {/* Mobile */}
+        <div className="md:hidden absolute top-0 right-0">
+          <Pokedex color="#FFFFFF10" width="300px" height="300px" />
+        </div>
+
         {/* Image */}
-        <figure className="z-10 absolute top-[5%] md:top-[10%] w-[90%] flex justify-center">
-          <img
-            src={data.image}
-            alt={data.name}
-            className="w-[90%] md:w-1/2 xl:w-[30%] object-contain drop-shadow-[0_35px_55px_rgba(0,0,0,0.35)]"
-          />
-        </figure>
+        <div className="z-10 absolute top-[7%] md:top-[5%] w-[90%] flex flex-wrap justify-center">
+          <div className="relative w-full">
+            <figure className="flex justify-center">
+              <img
+                src={data.image}
+                alt={data.name}
+                className="w-[70%] md:w-1/2 xl:w-[30%] object-contain drop-shadow-[0_35px_55px_rgba(0,0,0,0.35)]"
+              />
+            </figure>
+            <ChangePokemon />
+          </div>
+        </div>
 
         {/* Change Pokemon */}
-        <ChangePokemon />
 
         {/* Info Cards */}
         <div
-          className={`absolute -bottom-10 md:-bottom-[400px] p-2 md:p-8 ${bgColor} text-slate-700 w-full`}
+          className={`w-full p-2 md:p-8 ${bgColor} text-black self-end mt-[40%] md:mt-[15%]`}
         >
-          <div className="rounded-t-xl p-4 bg-white relative">
-            <div className="p-2 md:p-6">
-              {/* Type badges */}
-              <div className="flex gap-8 w-full justify-center mb-8 mt-20 md:mt-20">
-                {data.types?.map((type) => (
-                  <TypeBadge
-                    key={type.type.name}
-                    primaryType={type.type.name}
-                  />
-                ))}
-              </div>
-              <h2
-                className={`w-full text-center text-xl font-bold ${textColor} mb-4 md:mb-8`}
-              >
-                About
-              </h2>
-              <div className="grid grid-cols-3 justify-center">
-                <div className="grid gap-2 justify-center border-r border-gray-300">
-                  <p className="text-base md:text-xl flex items-center gap-2">
-                    <Weight />
-                    {data.weight} kg
-                  </p>
-                  <p className="self-end text-xs md:text-sm text-slate-400 text-center">
-                    Weight
-                  </p>
-                </div>
-                <div className="grid gap-2 justify-center border-r border-gray-300">
-                  <p className="text-base md:text-xl flex items-center gap-2">
-                    <Rule />
-                    {data.height} m
-                  </p>
-                  <p className="self-end text-xs md:text-sm text-slate-400 text-center">
-                    Height
-                  </p>
-                </div>
-                <div className="grid gap-2 justify-center">
-                  <ul className="capitalize">
-                    {data.moves?.slice(0, 2).map((move, idx) => (
-                      <li key={idx} className="text-base md:text-xl">
-                        {move.move.name}
-                      </li>
-                    ))}
-                  </ul>
-                  <p className="self-end text-xs md:text-sm text-slate-400 text-center">
-                    Moves
-                  </p>
-                </div>
-              </div>
-              <p className="text-justify text-black my-8 md:my-16">
-                {metaDescription}
-              </p>
-
-              <h2
-                className={`w-full text-xl text-center font-bold ${textColor} mb-4 md:mb-8`}
-              >
-                Base Stats
-              </h2>
-              <BaseStats
-                bgColor={bgColor}
-                bgOpacity={bgOpacity}
-                stats={data.stats}
-                textColor={textColor}
-              />
+          <div className="rounded-t-xl p-4 bg-white">
+            {/* Type badges */}
+            <div className="flex gap-8 w-full justify-center mb-8 mt-20 md:mt-20">
+              {data.types?.map((type) => (
+                <TypeBadge key={type.type.name} primaryType={type.type.name} />
+              ))}
             </div>
+            <h2
+              className={`w-full text-center text-xl font-bold ${textColor} mb-4 md:mb-8`}
+            >
+              About
+            </h2>
+            <div className="grid grid-cols-3 justify-center">
+              <div className="grid gap-2 justify-center border-r border-gray-300">
+                <p className="text-base md:text-xl flex items-center gap-2">
+                  <Weight />
+                  {data.weight} kg
+                </p>
+                <p className="self-end text-xs md:text-sm text-slate-400 text-center">
+                  Weight
+                </p>
+              </div>
+              <div className="grid gap-2 justify-center border-r border-gray-300">
+                <p className="text-base md:text-xl flex items-center gap-2">
+                  <Rule />
+                  {data.height} m
+                </p>
+                <p className="self-end text-xs md:text-sm text-slate-400 text-center">
+                  Height
+                </p>
+              </div>
+              <div className="grid gap-2 justify-center">
+                <ul className="capitalize">
+                  {data.moves?.slice(0, 2).map((move, idx) => (
+                    <li key={idx} className="text-base md:text-xl">
+                      {move.move.name}
+                    </li>
+                  ))}
+                </ul>
+                <p className="self-end text-xs md:text-sm text-slate-400 text-center">
+                  Moves
+                </p>
+              </div>
+            </div>
+            <p className="text-justify text-black my-8 md:my-16">
+              {metaDescription}
+            </p>
+            <h2
+              className={`w-full text-xl text-center font-bold ${textColor} mb-4 md:mb-8`}
+            >
+              Base Stats
+            </h2>
+            <BaseStats
+              bgColor={bgColor}
+              bgOpacity={bgOpacity}
+              stats={data.stats}
+              textColor={textColor}
+            />
           </div>
         </div>
       </article>
