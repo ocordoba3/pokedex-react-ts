@@ -24,9 +24,9 @@ export function PokemonCard({ pokemon }: Props) {
           src={pokemon.image}
           alt={pokemon.name}
           loading="lazy"
-          className="w-full object-contain z-10"
+          className="w-[80%] object-contain z-10 aspect-square"
         />
-        <p className="px-4 mb-2 md:mb-4 font-semibold capitalize text-lg md:text-2xl text-slate-800 line-clamp-1 z-10">
+        <p className="px-4 mb-2 md:mb-4 font-medium capitalize text-lg md:text-2xl text-slate-800 line-clamp-1 z-10">
           {pokemon.name}
         </p>
       </div>

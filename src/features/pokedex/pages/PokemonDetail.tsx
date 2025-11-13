@@ -208,7 +208,7 @@ function PokemonDetail() {
               <img
                 src={data.image}
                 alt={data.name}
-                className="w-[70%] md:w-1/2 xl:w-[30%] object-contain drop-shadow-[0_35px_55px_rgba(0,0,0,0.35)]"
+                className="w-[70%] sm:w-[60%] md:w-fit aspect-square"
               />
             </figure>
             <ChangePokemon />
@@ -219,11 +219,11 @@ function PokemonDetail() {
 
         {/* Info Cards */}
         <div
-          className={`w-full p-2 md:p-8 ${bgColor} text-black self-end mt-[40%] md:mt-[15%]`}
+          className={`w-full p-2 md:p-8 ${bgColor} text-black self-end mt-[40%] md:mt-[35%] xl:mt-[20%]`}
         >
           <div className="rounded-t-xl p-4 bg-white">
             {/* Type badges */}
-            <div className="flex gap-8 w-full justify-center mb-8 mt-20 md:mt-20">
+            <div className="flex gap-8 w-full justify-center mb-8 mt-20 xl:mt-12">
               {data.types?.map((type) => (
                 <TypeBadge key={type.type.name} primaryType={type.type.name} />
               ))}

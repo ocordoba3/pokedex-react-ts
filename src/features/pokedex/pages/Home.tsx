@@ -17,7 +17,6 @@ import type { PokemonListParams } from "../interfaces/pokemon.interface";
 import type { SortOption } from "../interfaces/list.interface";
 import useMetaTags from "../../../app/seo/hooks/useMetaTags";
 import NumberIcon from "../../../shared/components/icons/NumberIcon";
-import useUiStore from "../../../app/store/ui-store";
 
 const PAGE_LIMIT = 12;
 
@@ -28,7 +27,6 @@ function Home() {
   const search = params.get("search") || "";
   const [isSortOpen, setIsSortOpen] = useState(false);
   const [hasLoaded, setHasLoaded] = useState(false);
-  const { startLoading, stopLoading } = useUiStore();
 
   const queryParams = useMemo<PokemonListParams>(
     () => ({
@@ -108,14 +106,6 @@ function Home() {
     window.addEventListener("keydown", onKey);
     return () => window.removeEventListener("keydown", onKey);
   }, [isSortOpen]);
-
-  useEffect(() => {
-    if (isFetching) {
-      startLoading();
-    } else {
-      stopLoading();
-    }
-  }, [isFetching, startLoading, stopLoading]);
 
   useEffect(() => {
     const timeout = window.setTimeout(() => setHasLoaded(true), 100);

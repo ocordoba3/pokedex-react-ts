@@ -47,9 +47,9 @@ function App() {
         </main>
       </div>
       {isLoading && (
-        <div className="fixed h-screen w-full top-0 left-0 z-50 bg-gray-500/30 grid place-content-center overflow-hidden">
+        <div className="fixed h-screen w-full top-0 left-0 z-50 bg-gray-500/10 grid place-content-center overflow-hidden">
           <div className="animate-spin">
-            <Pokedex width="32" height="32" />
+            <Pokedex width="32" height="32" color="#c12239 " />
           </div>
         </div>
       )}
