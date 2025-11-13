@@ -1,35 +1,32 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
+import { useCallback, useEffect } from "react";
 
+import { DEFAULT_OG_IMAGE } from "../../../app/seo/helpers/seo";
+import { detailMetaTag } from "../helpers/generateMetaTag";
+import {
+  getBackgroundColor,
+  getBackgroundOpacity,
+  getTextColor,
+} from "../helpers/getStyles";
 import { getPokemonById } from "../api/pokemon";
 import { PATHS } from "../../../app/router/utils/paths";
-import {
-  TYPE_BG_CLASS_MAP,
-  TYPE_BG_OPACITY_MAP,
-  TYPE_TEXT_COLOR_CLASS_MAP,
-} from "../../../shared/utils/map-styles";
 import BaseStats from "../components/BaseStats";
 import ChangePokemon from "../components/ChangePokemon";
-import TypeBadge from "../../../shared/components/TypeBadge";
-import useMetaTags from "../../../app/seo/hooks/useMetaTags";
 import GoBack from "../../../shared/components/icons/GoBack";
 import Pokedex from "../../../shared/components/icons/Pokedex";
-import Weight from "../../../shared/components/icons/Weight";
 import Rule from "../../../shared/components/icons/Rule";
-import {
-  DEFAULT_OG_IMAGE,
-  SITE_NAME,
-  getAbsoluteUrl,
-} from "../../../app/seo/helpers/seo";
-import { useEffect } from "react";
+import TypeBadge from "../../../shared/components/TypeBadge";
+import useMetaTags from "../../../app/seo/hooks/useMetaTags";
 import useUiStore from "../../../app/store/ui-store";
+import Weight from "../../../shared/components/icons/Weight";
 
 function PokemonDetail() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { startLoading, stopLoading } = useUiStore();
 
-  const { data, isLoading, isError, error } = useQuery({
+  const { data, isLoading, isError } = useQuery({
     queryKey: ["pokemon", id],
     queryFn: () => {
       if (!id) {
@@ -41,91 +38,15 @@ function PokemonDetail() {
   });
 
   const primaryType = data?.types?.[0]?.type?.name?.toLowerCase() ?? "normal";
-  const formattedPrimaryType =
-    primaryType.charAt(0).toUpperCase() + primaryType.slice(1);
-  const bgColor =
-    TYPE_BG_CLASS_MAP[primaryType as keyof typeof TYPE_BG_CLASS_MAP] ??
-    TYPE_BG_CLASS_MAP.normal;
-  const textColor =
-    TYPE_TEXT_COLOR_CLASS_MAP[
-      primaryType as keyof typeof TYPE_TEXT_COLOR_CLASS_MAP
-    ] ?? TYPE_TEXT_COLOR_CLASS_MAP.normal;
-  const bgOpacity =
-    TYPE_BG_OPACITY_MAP[primaryType as keyof typeof TYPE_BG_OPACITY_MAP] ??
-    TYPE_BG_OPACITY_MAP.normal;
-
-  const formattedName = data?.name
-    ? data.name.charAt(0).toUpperCase() + data.name.slice(1)
-    : "Loading...";
-  const heightText = data?.height ? `${data.height} m` : "an unknown height";
-  const weightText = data?.weight ? `${data.weight} kg` : "an unknown weight";
-  const canonicalFromId = id
-    ? getAbsoluteUrl(PATHS.POKEMON_DETAIL(id))
-    : getAbsoluteUrl(PATHS.HOME);
-
-  const metaDescription = data
-    ? `${formattedName} is a ${formattedPrimaryType}-type Pokémon with ${heightText} and ${weightText}. Review base stats, featured moves, and typing insights.`
-    : "Browse detailed Pokémon profiles with types, measurements, moves, and base stats.";
-
-  const statsProperties =
-    data?.stats?.map((stat) => ({
-      "@type": "PropertyValue",
-      name: stat.stat?.name ?? "stat",
-      value: stat.base_stat,
-    })) ?? [];
-
-  const structuredData = data
-    ? {
-        "@context": "https://schema.org",
-        "@graph": [
-          {
-            "@type": "BreadcrumbList",
-            itemListElement: [
-              {
-                "@type": "ListItem",
-                position: 1,
-                name: SITE_NAME,
-                item: getAbsoluteUrl(PATHS.HOME),
-              },
-              {
-                "@type": "ListItem",
-                position: 2,
-                name: formattedName,
-                item: canonicalFromId,
-              },
-            ],
-          },
-          {
-            "@type": "VideoGameCharacter",
-            name: formattedName,
-            description: metaDescription,
-            image: data.image ?? DEFAULT_OG_IMAGE,
-            url: canonicalFromId,
-            identifier: data.id,
-            inLanguage: "en",
-            height: data.height ? `${data.height} m` : undefined,
-            weight: data.weight ? `${data.weight} kg` : undefined,
-            additionalProperty: [
-              {
-                "@type": "PropertyValue",
-                name: "Primary type",
-                value: formattedPrimaryType,
-              },
-              ...statsProperties,
-            ],
-          },
-        ],
-      }
-    : undefined;
-
-  const handleGoBack = () => {
-    const prevPath = localStorage.getItem("prevPath");
-    if (prevPath) {
-      navigate(prevPath, { replace: true });
-      return;
-    }
-    navigate(PATHS.HOME, { replace: true });
-  };
+  const bgColor = getBackgroundColor(primaryType);
+  const textColor = getTextColor(primaryType);
+  const bgOpacity = getBackgroundOpacity(primaryType);
+  const { formattedName, metaDescription, canonicalFromId, structuredData } =
+    detailMetaTag({
+      data,
+      id: id ? parseInt(id, 10) : null,
+      pokemonType: primaryType,
+    });
 
   useMetaTags({
     title: `Pokédex | ${formattedName}`,
@@ -135,6 +56,21 @@ function PokemonDetail() {
     canonical: canonicalFromId,
     structuredData,
   });
+
+  const handleGoBack = useCallback(() => {
+    const prevPath = localStorage.getItem("prevPath");
+    if (prevPath) {
+      navigate(prevPath, { replace: true });
+      return;
+    }
+    navigate(PATHS.HOME, { replace: true });
+  }, [navigate]);
+
+  useEffect(() => {
+    if (isError) {
+      navigate(PATHS.HOME, { replace: true });
+    }
+  }, [isError, navigate]);
 
   useEffect(() => {
     if (isLoading) {
@@ -146,16 +82,6 @@ function PokemonDetail() {
 
   if (isLoading) {
     return null;
-  }
-
-  if (isError) {
-    return (
-      <section className="w-full">
-        <div className="rounded-3xl bg-rose-50 p-6 text-rose-600">
-          {(error as Error).message || "Unable to load Pokémon details."}
-        </div>
-      </section>
-    );
   }
 
   if (!data) {
