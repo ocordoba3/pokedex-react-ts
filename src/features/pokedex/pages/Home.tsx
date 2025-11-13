@@ -123,8 +123,8 @@ function Home() {
   }, []);
 
   return (
-    <section className="flex w-full flex-col">
-      <div className="bg-type-fighting px-4 md:px-8 text-white pb-4 md:pb-8">
+    <section className="flex w-full flex-col bg-type-fighting min-h-[calc(100vh-60px)]">
+      <div className=" px-4 md:px-8 text-white pb-4 md:pb-8">
         <div className="flex gap-4 items-center">
           <SearchBar value={search} onChange={handleSearch} />
           <button
@@ -139,8 +139,8 @@ function Home() {
         </div>
       </div>
 
-      <div className="bg-type-fighting p-2 md:p-8">
-        <div className="bg-white rounded-xl p-4 md:p-8 w-full ">
+      <div className="pt-0 px-2 pb-2 md:pb-8 md:px-8">
+        <div className="bg-white rounded-xl p-4 w-full ">
           <div className="flex-1 rounded-4xl bg-white">
             {(isError || pokemons.length === 0) && !isFetching && (
               <div className="rounded-2xl bg-slate-50 p-10 text-center text-slate-500">
@@ -150,7 +150,7 @@ function Home() {
             {!isFetching && pokemons.length > 0 && (
               <>
                 <div
-                  className={`grid grid-cols-3 gap-2 md:gap-8 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6 transition-opacity duration-1000 ease-out ${
+                  className={`grid grid-cols-3 gap-2 md:gap-4 sm:grid-cols-3 lg:grid-cols-3 xl:grid-cols-6 transition-opacity duration-1000 ease-out ${
                     hasLoaded ? "opacity-100" : "opacity-0"
                   }`}
                 >
