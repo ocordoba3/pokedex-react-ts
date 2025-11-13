@@ -1,6 +1,6 @@
 import { keepPreviousData, useQuery } from "@tanstack/react-query";
 
-import { api } from "../../../lib/api";
+import { api } from "../../../app/api";
 import type {
   PokemonListParams,
   PokemonListResponse,

@@ -1,6 +1,6 @@
 import { useMutation } from "@tanstack/react-query";
 
-import { api, setAuthToken } from "../../../lib/api";
+import { api, setAuthToken } from "../../../app/api";
 import type { LoginResponse, LoginBody } from "../interfaces/auth.interface";
 
 export async function loginRequest(

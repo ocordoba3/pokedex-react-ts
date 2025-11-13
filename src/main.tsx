@@ -4,7 +4,7 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 
 import { AuthProvider } from "./features/auth/context/AuthContext";
-import { queryClient } from "./lib/queryClient";
+import { queryClient } from "./app/api/helpers/queryClient";
 import App from "./app/App";
 
 ReactDOM.createRoot(document.getElementById("root") as HTMLElement).render(
