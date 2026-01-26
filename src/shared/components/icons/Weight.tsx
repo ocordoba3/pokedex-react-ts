@@ -1,4 +1,4 @@
-const Weight = () => {
+const WeightIcon = () => {
   return (
     <svg
       width="24"
@@ -15,4 +15,4 @@ const Weight = () => {
   );
 };
 
-export default Weight;
+export default WeightIcon;

@@ -16,8 +16,8 @@ export type PokemonListResponse = {
 
 export type PokemonDetail = PokemonListItem & {
   description?: string;
-  height?: number;
-  weight?: number;
+  height: number;
+  weight: number;
   types?: TypesObj[];
   abilities?: string[];
   moves?: Moves[];
@@ -37,7 +37,7 @@ type TypesObj = {
   type: CommonObj;
 };
 
-type Moves = {
+export type Moves = {
   move: CommonObj;
 };
 

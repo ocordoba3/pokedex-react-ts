@@ -1,4 +1,4 @@
-const Rule = () => {
+const RuleIcon = () => {
   return (
     <svg
       width="24"
@@ -15,4 +15,4 @@ const Rule = () => {
   );
 };
 
-export default Rule;
+export default RuleIcon;

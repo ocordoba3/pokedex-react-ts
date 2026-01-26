@@ -4,7 +4,7 @@ import { Route, Routes, Navigate } from "react-router-dom";
 import { PATHS } from "./utils/paths";
 import ProtectedRoute from "../../features/auth/components/ProtectedRoute";
 
-const Login = lazy(() => import("../../features/auth/pages/Login"));
+const LoginPage = lazy(() => import("../../features/auth/pages/LoginPage"));
 const PokemonListPage = lazy(
   () => import("../../features/pokedex/pages/PokemonListPage"),
 );
@@ -15,7 +15,7 @@ const PokemonDetailPage = lazy(
 function Router() {
   return (
     <Routes>
-      <Route path={PATHS.LOGIN} element={<Login />} />
+      <Route path={PATHS.LOGIN} element={<LoginPage />} />
       <Route
         path={PATHS.HOME}
         children={[

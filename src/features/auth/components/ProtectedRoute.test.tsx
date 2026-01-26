@@ -2,13 +2,16 @@ import { render, screen } from "@testing-library/react";
 import { MemoryRouter, Route, Routes } from "react-router-dom";
 import { describe, expect, it, vi } from "vitest";
 import type { ContextType } from "react";
+import "@testing-library/jest-dom/vitest";
 
 import ProtectedRoute from "./ProtectedRoute";
 import AuthContext from "../context/AuthContext";
 
 type AuthContextShape = NonNullable<ContextType<typeof AuthContext>>;
 
-const createAuthValue = (overrides?: Partial<AuthContextShape>): AuthContextShape => ({
+const createAuthValue = (
+  overrides?: Partial<AuthContextShape>,
+): AuthContextShape => ({
   user: null,
   isAuthenticated: false,
   login: vi.fn(),
@@ -32,7 +35,7 @@ const renderWithRouter = (authValue: AuthContextShape) =>
           <Route path="/login" element={<p>Login screen</p>} />
         </Routes>
       </MemoryRouter>
-    </AuthContext.Provider>
+    </AuthContext.Provider>,
   );
 
 describe("ProtectedRoute", () => {

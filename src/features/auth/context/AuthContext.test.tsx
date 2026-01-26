@@ -3,7 +3,7 @@ import { beforeEach, describe, expect, it, vi } from "vitest";
 
 import { AuthProvider } from "./AuthContext";
 import { useAuth } from "../hooks/useAuth";
-import { setAuthToken } from "../../../lib/api";
+import { setAuthToken } from "../../../app/api";
 
 vi.mock("../../../lib/api", () => ({
   setAuthToken: vi.fn(),
@@ -19,7 +19,7 @@ describe("AuthProvider", () => {
 
   it("throws when useAuth is used outside of the provider", () => {
     expect(() => renderHook(() => useAuth())).toThrow(
-      "useAuth debe usarse dentro de un AuthProvider."
+      "useAuth debe usarse dentro de un AuthProvider.",
     );
   });
 
