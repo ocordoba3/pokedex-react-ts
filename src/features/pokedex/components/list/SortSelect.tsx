@@ -1,7 +1,7 @@
 import type {
   SortOption,
   SortSelectOption,
-} from "../interfaces/list.interface";
+} from "../../interfaces/list.interface";
 
 type Props = {
   value: SortOption;

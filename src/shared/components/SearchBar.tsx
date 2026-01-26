@@ -1,71 +1,73 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
+import SearchIcon from "./icons/Search";
 
-type Props = {
-  value: string;
-  onChange: (value: string) => void;
-  placeholder?: string;
-  debounceMs?: number;
-};
+const DEBOUNCE_MS = 300;
 
-export function SearchBar({
-  value,
-  onChange,
-  placeholder = "Search",
-  debounceMs = 500,
-}: Props) {
-  const [inputValue, setInputValue] = useState(value);
+export function SearchBar() {
+  const [params, setParams] = useSearchParams();
+  const search = params.get("search") || "";
+  const [inputValue, setInputValue] = useState(search);
 
-  useEffect(() => {
-    setInputValue(value);
-  }, [value]);
+  const handleSearch = useCallback(
+    (value: string) => {
+      setParams((prev) => {
+        const next = new URLSearchParams(prev);
+        if (!value) {
+          next.delete("search");
+        } else {
+          next.set("search", value);
+        }
+        next.delete("page");
+        return next;
+      });
+    },
+    [setParams],
+  );
 
+  // Debounce input changes
   useEffect(() => {
     const handle = window.setTimeout(() => {
-      if (inputValue !== value) {
-        onChange(inputValue);
+      if (inputValue !== search) {
+        handleSearch(inputValue);
       }
-    }, debounceMs);
+    }, DEBOUNCE_MS);
 
     return () => {
       window.clearTimeout(handle);
     };
-  }, [inputValue, value, debounceMs, onChange]);
-
-  const clear = () => setInputValue("");
+  }, [inputValue, search, handleSearch]);
 
   return (
-    <label className="flex w-full items-center gap-3 rounded-full bg-white px-4 py-2 text-sm text-slate-500 shadow-[inset_0_2px_8px_rgba(15,23,42,0.1)]">
-      <svg
-        className="h-5 w-5 text-type-fighting"
-        viewBox="0 0 24 24"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={2}
-        strokeLinecap="round"
-        strokeLinejoin="round"
-        aria-hidden="true"
-      >
-        <circle cx="11" cy="11" r="7" />
-        <line x1="16.65" y1="16.65" x2="21" y2="21" />
-      </svg>
+    <form
+      role="search"
+      className="flex w-full items-center gap-3 rounded-full bg-white px-4 py-2 text-sm text-slate-500 shadow-[inset_0_2px_8px_rgba(15,23,42,0.1)]"
+    >
+      <SearchIcon />
+      <label htmlFor="search" className="sr-only">
+        Search Pokémon
+      </label>
       <input
-        className="flex-1 bg-transparent text-base text-slate-700 outline-none placeholder:text-slate-400"
-        value={inputValue}
-        onChange={(event) => setInputValue(event.target.value)}
-        placeholder={placeholder}
-        type="text"
         autoComplete="off"
+        className="flex-1 bg-transparent text-base text-slate-700 outline-none placeholder:text-slate-400"
+        id="search"
+        name="search"
+        onChange={(event) => setInputValue(event.target.value)}
+        placeholder="Search Pokémon..."
+        type="text"
+        value={inputValue}
       />
       {inputValue ? (
         <button
+          aria-label="Clear search"
           type="button"
           className="rounded-full bg-slate-100 px-2 py-1 text-xs font-semibold text-slate-500 cursor-pointer"
-          onClick={clear}
+          onClick={() => setInputValue("")}
         >
           ×
         </button>
       ) : null}
-    </label>
+    </form>
   );
 }
 

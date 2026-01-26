@@ -11,8 +11,8 @@ import {
 } from "../helpers/getStyles";
 import { getPokemonById } from "../api/pokemon";
 import { PATHS } from "../../../app/router/utils/paths";
-import BaseStats from "../components/BaseStats";
-import ChangePokemon from "../components/ChangePokemon";
+import BaseStats from "../components/details/BaseStats";
+import ChangePokemon from "../components/details/ChangePokemon";
 import GoBack from "../../../shared/components/icons/GoBack";
 import Pokedex from "../../../shared/components/icons/Pokedex";
 import Rule from "../../../shared/components/icons/Rule";
@@ -21,7 +21,7 @@ import useMetaTags from "../../../app/seo/hooks/useMetaTags";
 import useUiStore from "../../../app/store/ui-store";
 import Weight from "../../../shared/components/icons/Weight";
 
-function PokemonDetail() {
+function PokemonDetailPage() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
   const { startLoading, stopLoading } = useUiStore();
@@ -212,4 +212,4 @@ function PokemonDetail() {
   );
 }
 
-export default PokemonDetail;
+export default PokemonDetailPage;

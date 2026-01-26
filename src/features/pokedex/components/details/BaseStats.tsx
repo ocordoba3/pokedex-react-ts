@@ -1,4 +1,4 @@
-import type { PokemonStats } from "../interfaces/pokemon.interface";
+import type { PokemonStats } from "../../interfaces/pokemon.interface";
 
 type Props = {
   bgColor: string;
@@ -29,7 +29,7 @@ const BaseStats = ({ bgColor, stats, textColor, bgOpacity }: Props) => {
         const paddedValue = value.toString().padStart(3, "0");
         const percentage = Math.min(
           100,
-          Math.round((value / MAX_BASE_STAT) * 100)
+          Math.round((value / MAX_BASE_STAT) * 100),
         );
 
         return (

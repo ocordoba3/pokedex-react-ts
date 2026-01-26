@@ -4,10 +4,12 @@ import { Route, Routes, Navigate } from "react-router-dom";
 import { PATHS } from "./utils/paths";
 import ProtectedRoute from "../../features/auth/components/ProtectedRoute";
 
-const Home = lazy(() => import("../../features/pokedex/pages/Home"));
 const Login = lazy(() => import("../../features/auth/pages/Login"));
-const PokemonDetail = lazy(
-  () => import("../../features/pokedex/pages/PokemonDetail")
+const PokemonListPage = lazy(
+  () => import("../../features/pokedex/pages/PokemonListPage"),
+);
+const PokemonDetailPage = lazy(
+  () => import("../../features/pokedex/pages/PokemonDetailPage"),
 );
 
 function Router() {
@@ -21,7 +23,7 @@ function Router() {
             path={PATHS.HOME}
             element={
               <ProtectedRoute>
-                <Home />
+                <PokemonListPage />
               </ProtectedRoute>
             }
           />,
@@ -29,7 +31,7 @@ function Router() {
             path={PATHS.POKEMON_DETAIL(":id")}
             element={
               <ProtectedRoute>
-                <PokemonDetail />
+                <PokemonDetailPage />
               </ProtectedRoute>
             }
           />,
