@@ -5,7 +5,7 @@ import { AuthProvider } from "./AuthContext";
 import { useAuth } from "../hooks/useAuth";
 import { setAuthToken } from "../../../app/api";
 
-vi.mock("../../../lib/api", () => ({
+vi.mock("../../../app/api", () => ({
   setAuthToken: vi.fn(),
 }));
 
